@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cart', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('session_id')->nullable();//корзина для гостей(id сессии или UUID
             $table->string('status')->default('active'); //active, ordered, abandoned, canceled
             $table->timestamps();
         });
 
-        Schema::create('cart_item', function (Blueprint $table) {
+        Schema::create('cart_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('cart_id');
-            $table->integer('product_id');
-            $table->integer('product_size_id');
+            $table->foreignId('cart_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_size_id')->constrained()->cascadeOnDelete();
             $table->integer('quantity');
             $table->decimal('price_per_unit', 10, 2);
             $table->timestamps();
@@ -36,8 +36,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cart');
         Schema::dropIfExists('cart_item');
+        Schema::dropIfExists('cart');
     }
 };
 
