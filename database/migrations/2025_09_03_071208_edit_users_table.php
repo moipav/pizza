@@ -15,6 +15,7 @@ return new class extends Migration {
                 $table->string('surname');
                 $table->string('phone', 10);
             });
+            $table->foreignId('status_id')->nullable()->constrained('user_status')->nullOnDelete();
         });
 
         Schema::table('users', function (Blueprint $table) {
