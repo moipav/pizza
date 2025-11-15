@@ -24,12 +24,12 @@
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
             <td>
-                <a href="{{ route('users.show', $user) }}">Просмотр</a>
-                <a href="{{ route('users.edit', $user) }}">Редактировать</a>
+                <a class="btn btn-primary" href="{{ route('users.show', $user) }}">Просмотр</a>
+                <a class="btn btn-warning" href="{{ route('users.edit', $user) }}">Редактировать</a>
                 <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" onclick="return confirm('Удалить?')">Удалить</button>
+                    <button class="btn btn-danger" type="submit" onclick="return confirm('Удалить?')">Удалить</button>
                 </form>
             </td>
         </tr>
