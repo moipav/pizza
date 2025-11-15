@@ -54,4 +54,5 @@ class User extends Authenticatable
     {
         return $this->belongsTo(UserStatus::class, 'status_id'); //belongsTo — потому что у одного пользователя один статус
     }
+
 }
