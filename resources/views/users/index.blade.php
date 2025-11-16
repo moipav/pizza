@@ -4,9 +4,9 @@
 <h1>Пользователи</h1>
 <a href="{{ route('users.create') }}" class="btn btn-primary">Добавить пользователя</a>
 
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
+{{--@if(session('success'))--}}
+{{--    <div class="alert alert-success">{{ session('success') }}</div>--}}
+{{--@endif--}}
 
 <table class="table">
     <thead>

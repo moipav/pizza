@@ -31,7 +31,7 @@ class UserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'phone' => 'required|string|unique:users|max:10',
@@ -40,14 +40,7 @@ class UserController extends Controller
             'password' => 'required|min:8|confirmed'
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'date_of_birth' => $request->date_of_birth,
-            'password' => $request->password
-        ]);
+        $user = User::create($validated);
 
         return redirect()->route('users.index')->with('success', 'Пользователь добавлен');
     }
@@ -59,7 +52,6 @@ class UserController extends Controller
     {
         $user = User::find($id);
         return view('users.show', compact('user'));
-        //
     }
 
     /**
@@ -80,7 +72,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'phone' => 'required|string|max:10|unique:users,phone,' . $user->id,
-            'email' => 'required|string|email|unique:users,email,'.  $user->id . '|max:255',
+            'email' => 'required|string|email|unique:users,email,' . $user->id . '|max:255',
             'date_of_birth' => 'required|date'
         ]);
 
@@ -97,7 +89,7 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('users.index')->with('success', 'Пользователь удалён!');
         /*
-         * TODO проветрить возможность бузопасного удаления
+         * TODO проветрить возможность безопасного удаления
          */
     }
 }
