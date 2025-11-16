@@ -31,7 +31,6 @@ class UserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-//        dd($request);
         $request->validate([
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
@@ -66,7 +65,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id):View
+    public function edit(string $id): View
     {
         $user = User::find($id);
         return view('users.edit', compact('user'));
@@ -77,15 +76,28 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user): RedirectResponse
     {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'phone' => 'required|string|max:10|unique:users,phone,' . $user->id,
+            'email' => 'required|string|email|unique:users,email,'.  $user->id . '|max:255',
+            'date_of_birth' => 'required|date'
+        ]);
 
-        //
+        $user->update($validated);
+
+        return to_route('users.show', $user)->with('success', 'Данные пользователя обновлены!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->route('users.index')->with('success', 'Пользователь удалён!');
+        /*
+         * TODO проветрить возможность бузопасного удаления
+         */
     }
 }

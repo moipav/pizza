@@ -2,7 +2,18 @@
 
 @section('content')
     <h1>Редактировать пользователя {{$user->name}}</h1>
-
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <form action="{{ route('users.update', $user) }}" method="POST">
         @csrf
         @method('PUT')
@@ -15,7 +26,7 @@
             <div>
                 <label for="surname">Фамилия:</label>
                 <input type="text" class="form-control" name="surname" id="surname"
-                       value="{{ old('name', $user->surname) }}" required>
+                       value="{{ old('surname', $user->surname) }}" required>
             </div>
             <div>
                 <label for="phone">Номер телефона (без +7):</label>
@@ -34,6 +45,6 @@
         <div>
             <button type="submit">Обновить</button>
         </div>
-        <button type="submit">Обновить</button>
+
     </form>
 @endsection

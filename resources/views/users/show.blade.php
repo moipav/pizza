@@ -8,4 +8,5 @@
     <p>Дата регистрации: <b>{{$user->created_at}}</b></p>
 
     <a class="btn btn-primary" href="{{ route('users.index') }}">Список пользователей</a>
+    <a class="btn btn-warning" href="{{ route('users.edit', $user) }}">Редактировать пользователя</a>
 @endsection
