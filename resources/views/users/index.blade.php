@@ -14,6 +14,7 @@
         <th>ID</th>
         <th>Имя</th>
         <th>Email</th>
+        <th>Статус пользователя</th>
         <th>Действия</th>
     </tr>
     </thead>
@@ -23,6 +24,7 @@
             <td>{{ $user->id }}</td>
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
+            <td>{{$user->status->name}}</td>
             <td>
                 <a class="btn btn-primary" href="{{ route('users.show', $user) }}">Просмотр</a>
                 <a class="btn btn-warning" href="{{ route('users.edit', $user) }}">Редактировать</a>

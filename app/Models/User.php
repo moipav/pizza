@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -51,7 +52,7 @@ class User extends Authenticatable
         ];
     }
 
-    protected function status(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    protected function status(): BelongsTo
     {
         return $this->belongsTo(UserStatus::class, 'status_id'); //belongsTo — потому что у одного пользователя один статус
     }
