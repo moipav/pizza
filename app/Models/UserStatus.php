@@ -4,9 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserStatus extends Model
 {
+    /*
+     * TODO Обеспечить SoftDelete
+     */
+//    use SoftDeletes;
     protected $fillable = ['name'];
 
     public $timestamps = false;

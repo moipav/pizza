@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserStatus;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -20,7 +21,7 @@ class UserStatusController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('users.statuses.create');
     }
@@ -28,13 +29,13 @@ class UserStatusController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:user_statuses'
         ]);
 
-        $status = UserStatus::create($validated);
+        $userStatus = UserStatus::create($validated);
 
         return redirect()->route('statuses.index')->with('success', 'Статус успешно добавлен');
     }
@@ -42,32 +43,45 @@ class UserStatusController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): View
     {
-        //
+        $userStatus = UserStatus::find($id);
+        return view('users.statuses.show', compact('userStatus'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): View
     {
-        //
+        $userStatus = UserStatus::find($id);
+        return view('users.statuses.edit', compact('userStatus'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, UserStatus $userStatus): RedirectResponse
     {
-        //
+        /*
+         * TODO Разобраться, почему не меняется имя статуса!
+         */
+        dd($userStatus);
+        $validated = $request->validate([
+            'name' => 'required|string|unique:user_statuses,name,' . $userStatus->id . '|max:255'
+        ]);
+
+        $userStatus->update($validated);
+
+        return to_route('statuses.index', $userStatus)->with('success', 'Данные статуса изменены');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(UserStatus $userStatus): RedirectResponse
     {
-        //
+        $userStatus->delete();
+        return redirect()->route('users.statuses.index')->with('success', 'Статус удален');
     }
 }

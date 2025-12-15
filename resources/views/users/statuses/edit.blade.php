@@ -1,8 +1,18 @@
 @extends('layout')
 
 @section('content')
-    <h1>Доступные статусы:</h1>
-    @foreach($statuses as $status)
-        <p>{{$status->name}}</p>
-    @endforeach
+    <h1>Редактировать статус пользователя: {{$userStatus->name}}</h1>
+
+    <form action="{{ route('statuses.update', $userStatus) }}" method="POST">
+        @csrf
+        @method('PUT')
+        <div>
+            <label for="name">Статус:</label>
+            <input type="text" class="form-control" name="name" id="name"
+                   value="{{ old('userStatus', $userStatus) }}" required>
+        </div>
+        <div>
+            <button type="submit">Обновить</button>
+        </div>
+    </form>
 @endsection
