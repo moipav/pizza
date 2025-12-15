@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\UserStatus;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class UserStatusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $statuses = UserStatus::all();
         return view('users.statuses.index', compact('statuses'));
@@ -21,7 +22,7 @@ class UserStatusController extends Controller
      */
     public function create()
     {
-        //
+        return view('users.statuses.create');
     }
 
     /**
@@ -29,7 +30,13 @@ class UserStatusController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:user_statuses'
+        ]);
+
+        $status = UserStatus::create($validated);
+
+        return redirect()->route('statuses.index')->with('success', 'Статус успешно добавлен');
     }
 
     /**

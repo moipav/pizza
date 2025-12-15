@@ -11,10 +11,10 @@
 <header>
     <ul class="nav">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/create">Active</a>
+            <a class="nav-link active" aria-current="page" href="/users">users</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link active" href="/statuses">statuses</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">Link</a>

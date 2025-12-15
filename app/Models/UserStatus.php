@@ -9,6 +9,7 @@ class UserStatus extends Model
 {
     protected $fillable = ['name'];
 
+    public $timestamps = false;
     public function users(): HasMany
     {
         return $this->hasMany(User::class); //hasMany — потому что у одного статуса может быть много пользователей.
