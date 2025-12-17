@@ -66,7 +66,7 @@ class UserStatusController extends Controller
         /*
          * TODO Разобраться, почему не меняется имя статуса!
          */
-        dd($userStatus);
+//        dd($request);
         $validated = $request->validate([
             'name' => 'required|string|unique:user_statuses,name,' . $userStatus->id . '|max:255'
         ]);
