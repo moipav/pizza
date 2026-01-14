@@ -9,7 +9,7 @@
         <div>
             <label for="name">Статус:</label>
             <input type="text" class="form-control" name="name" id="name"
-                   value="{{ old('name', $userStatus) }}" required>
+                   value="{{ old('name', $userStatus->name) }}" required>
         </div>
         <div>
             <button type="submit">Обновить</button>
