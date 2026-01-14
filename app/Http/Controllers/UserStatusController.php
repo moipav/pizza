@@ -71,6 +71,7 @@ class UserStatusController extends Controller
             'name' => 'required|string|unique:user_statuses,name,' . $userStatus->id . '|max:255'
         ]);
 
+//        dd($userStatus->update($validated));
         $userStatus->update($validated);
 
         return to_route('statuses.index', $userStatus)->with('success', 'Данные статуса изменены');
@@ -82,6 +83,6 @@ class UserStatusController extends Controller
     public function destroy(UserStatus $userStatus): RedirectResponse
     {
         $userStatus->delete();
-        return redirect()->route('users.statuses.index')->with('success', 'Статус удален');
+        return to_route('users.statuses.index')->with('success', 'Статус удален');
     }
 }
