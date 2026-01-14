@@ -37,7 +37,7 @@ class UserStatusController extends Controller
 
         $userStatus = UserStatus::create($validated);
 
-        return redirect()->route('statuses.index')->with('success', 'Статус успешно добавлен');
+        return to_route('user.statuses.index')->with('success', 'Статус успешно добавлен');
     }
 
     /**
@@ -61,20 +61,19 @@ class UserStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserStatus $userStatus): RedirectResponse
+    public function update(Request $request, UserStatus $status): RedirectResponse
     {
-        /*
-         * TODO Разобраться, почему не меняется имя статуса!
-         */
-//        dd($request);
         $validated = $request->validate([
-            'name' => 'required|string|unique:user_statuses,name,' . $userStatus->id . '|max:255'
+            'name' => 'required|string|unique:user_statuses,name,' . $status->id . '|max:255'
         ]);
 
-//        dd($userStatus->update($validated));
-        $userStatus->update($validated);
+        try {
+            $status->update($validated);
+            return to_route('statuses.index')->with('success', 'Данные статуса изменены');
+        } catch (\Exception $e) {
+            return to_route('statuses.index', $e)->with('error', 'ощипка');
+        }
 
-        return to_route('statuses.index', $userStatus)->with('success', 'Данные статуса изменены');
     }
 
     /**
