@@ -14,8 +14,8 @@ class UserStatusController extends Controller
      */
     public function index(): View
     {
-        $statuses = UserStatus::all();
-        return view('users.statuses.index', compact('statuses'));
+
+        return view('users.statuses.index', ['statuses' => UserStatus::all()]);
     }
 
     /**
@@ -37,7 +37,7 @@ class UserStatusController extends Controller
 
         $userStatus = UserStatus::create($validated);
 
-        return to_route('user.statuses.index')->with('success', 'Статус успешно добавлен');
+        return to_route('statuses.index')->with('success', 'Статус успешно добавлен');
     }
 
     /**
@@ -45,8 +45,7 @@ class UserStatusController extends Controller
      */
     public function show(string $id): View
     {
-        $userStatus = UserStatus::find($id);
-        return view('users.statuses.show', compact('userStatus'));
+        return view('users.statuses.show', ['userStatus' => UserStatus::find($id)]);
     }
 
     /**
@@ -79,9 +78,9 @@ class UserStatusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserStatus $userStatus): RedirectResponse
+    public function destroy(UserStatus $status): RedirectResponse
     {
-        $userStatus->delete();
-        return to_route('users.statuses.index')->with('success', 'Статус удален');
+        $status->delete();
+        return to_route('statuses.index')->with('success', 'Статус удален');
     }
 }
