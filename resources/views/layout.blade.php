@@ -20,6 +20,9 @@
             <a class="nav-link" href="/categories">Категории</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="/products">Продукты</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link disabled" aria-disabled="true">Disabled</a>
         </li>
     </ul>
