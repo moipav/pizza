@@ -19,11 +19,11 @@
         </div>
         <div>
             <label for="name" class="form-label">Название:</label>
-            <input type="text" name="name" class="form-control" required>
+            <input type="text" name="name" value="{{old('name')}}" class="form-control" required>
         </div>
         <div>
             <label for="description" class="form-label">Описание:</label>
-            <textarea name="description" class="form-control" placeholder="Описание"></textarea>
+            <textarea name="description" class="form-control" placeholder="Описание" value="{{old('description')}}"></textarea>
         </div>
         <div>
             <label for="price" class="form-label">Цена:</label>

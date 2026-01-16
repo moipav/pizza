@@ -12,18 +12,18 @@
             <th>Описание</th>
             <th>Размер</th>
             <th>Стоимость</th>
+            <th>Действия</th>
         </tr>
         </thead>
         <tbody>
             <tr>
-                <td>{{ $product->image }}</td>
+                <td><img src="{{\Illuminate\Support\Facades\Storage::url($product->image)  }}" class="rounded mx-auto d-block" alt="на фото изображено {{$product->description}}" width="150" height="150">"</td>
                 <td>{{ $product->name }}</td>
                 <td>{{$product->description}}</td>
                 <td>Здесь будут размеры</td>
                 <td>{{$product->price}}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ route('product.show', $product) }}">Просмотр</a>
-                    <a class="btn btn-warning" href="{{ route('product.edit', $product) }}">Редактировать</a>
+                    <a class="btn btn-warning" href="{{ route('products.edit', $product) }}">Редактировать</a>
                     <form action="{{ route('products.destroy', $product) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')

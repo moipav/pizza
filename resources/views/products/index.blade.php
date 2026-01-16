@@ -18,7 +18,10 @@
         <tbody>
         @foreach($products as $product)
             <tr>
-                <td><img src="{{\Illuminate\Support\Facades\Storage::url($product->image)  }}" class="rounded mx-auto d-block" alt="на фото изображено {{$product->description}}" width="150" height="150">"</td>
+                <td><img src="{{\Illuminate\Support\Facades\Storage::url($product->image)}}"
+                         class="rounded mx-auto d-block" alt="на фото изображено {{$product->description}}" width="150"
+                         height="150">"
+                </td>
                 <td>{{ $product->name }}</td>
                 <td>{{$product->description}}</td>
                 <td>Здесь будут размеры</td>
@@ -29,7 +32,8 @@
                     <form action="{{ route('products.destroy', $product) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger" type="submit" onclick="return confirm('Удалить?')">Удалить</button>
+                        <button class="btn btn-danger" type="submit" onclick="return confirm('Удалить?')">Удалить
+                        </button>
                     </form>
                 </td>
             </tr>

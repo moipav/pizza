@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -34,53 +35,71 @@ class ProductController extends Controller
     public function store(Request $request): RedirectResponse
     {
 //        dd($request);
-        $request->validate([
+        $data = $request->validate([
             'category_id' => 'required|numeric',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'price' =>'numeric|min:0|max:99999999'
+            'price' => 'numeric|min:0|max:99999999'
         ]);
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+        Product::create($data);
 
-        Product::create([
-            'category_id' =>$request->input('category_id'),
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'image' => $request->file('image')->store('images', 'public'),
-            'price' => $request->input('price')
-        ]);
-        return to_route('products.index')->with('success', 'добавлен');
+        return to_route('products.index')->with('success', $request->name . ' добавлен');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): View
     {
-        //
+        return \view('products.show', ['product' => Product::find($id)]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): View
     {
-        //
+        return view('products.edit', [
+            'product' => Product::find($id),
+            'categories' => Category::all()
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Product $product)
     {
-        //
+        $data = $request->validate([
+            'category_id' => 'required|numeric',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'price' => 'numeric|min:0|max:99999999'
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product->update($data);
+
+        return back()->with('success', 'Данные для ' . $product->name . ' обновлены');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product): RedirectResponse
     {
-        //
+        $product->delete();
+        return to_route('products.index');
     }
 }
