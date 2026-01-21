@@ -12,7 +12,6 @@ class CategoryController extends Controller
 
     public function index(): View
     {
-
         return view('products.categories.index', ['categories' => Category::all()]);
     }
 
@@ -26,7 +25,7 @@ class CategoryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'unique|required|string|max:255'
+            'name' => '|required|string|max:255|unique'
         ]);
 
         Category::create($validated);
@@ -37,20 +36,20 @@ class CategoryController extends Controller
 
     public function show(string $id): View
     {
-        return view('products.categories.show', ['category' => Category::find($id)]);
+        return view('products.categories.show', ['category' => Category::findOrFail($id)]);
     }
 
 
     public function edit(string $id): View
     {
-        return view('products.categories.edit', ['category' => Category::find($id)]);
+        return view('products.categories.edit', ['category' => Category::findOrFail($id)]);
     }
 
 
     public function update(Request $request, Category $category): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255'
+            'name' => 'required|string|max:255|unique:category,name' . $category->id,
         ]);
 
         $category->update($validated);
@@ -61,7 +60,6 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-
         try {
             $category->delete();
             return to_route('categories.index')->with('success', 'Категория удалена');

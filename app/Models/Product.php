@@ -28,4 +28,14 @@ class Product extends Model
     {
         return $this->hasMany(ProductSize::class);
     }
+
+
+    public function getFinalPrice(ProductSize $size = null)
+    {
+        if ($size) {
+            return $this->price +$size->priceAdjustment;
+        }
+
+        return $this->price;
+    }
 }

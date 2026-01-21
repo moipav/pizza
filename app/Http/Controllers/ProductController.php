@@ -39,11 +39,11 @@ class ProductController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'category_id' => 'required|numeric',
+            'category_id' => 'required|numeric|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'price' => 'numeric|min:0|max:99999999'
+            'price' => 'numeric|min:0'
         ]);
 
         if ($request->hasFile('image')) {
@@ -57,16 +57,14 @@ class ProductController extends Controller
 
     public function show(string $id): View
     {
-        return \view('products.show', ['product' => Product::find($id)]);
+        return \view('products.show', ['product' => Product::findOrFail($id)]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(string $id): View
     {
         return view('products.edit', [
-            'product' => Product::find($id),
+            'product' => Product::findOrFail($id),
             'categories' => Category::all()
         ]);
     }
@@ -75,11 +73,11 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
-            'category_id' => 'required|numeric',
+            'category_id' => 'required|numeric|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'price' => 'numeric|min:0|max:99999999'
+            'price' => 'numeric|min:0'
         ]);
 
         if ($request->hasFile('image')) {
