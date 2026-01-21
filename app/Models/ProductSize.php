@@ -10,6 +10,15 @@ class ProductSize extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'product_id',
+        'size_name',
+        'size_value',
+        'unit',
+        'price_adjustment',
+    ];
+
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

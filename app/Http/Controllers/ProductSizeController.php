@@ -2,63 +2,74 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductSize;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProductSizeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function index(): View
     {
-        //
+        return view('products.sizes.index', ['productSizes' => ProductSize::all()]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function create(): View
     {
-        //
+        return view('products.sizes.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'product_id' => 'required|exists:product,id',
+            'size_name' => 'required|string|max:50',
+            'size_value'=> 'required|numeric',
+            'unit'=>'required|string|max:10',
+            'price_adjustment' => 'required|numeric|min:0',
+        ]);
+
+        ProductSize::create($validated);
+
+        return to_route('product-sizes.index')->with('Новый размер добавлен');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+
+    public function show(string $id): View
     {
-        //
+        return view('products.sizes.show');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+
+    public function edit(string $id): View
     {
-        //
+        return view('product.sizes.edit', ['product_size' => ProductSize::findOrFail($id)]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+
+    public function update(Request $request, ProductSize $size): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'product_id' => 'required|exists:product,id',
+            'size_name' => 'required|string|max:50',
+            'size_value'=> 'required|numeric',
+            'unit'=>'required|string|max:10',
+            'price_adjustment' => 'required|numeric|min:0',
+        ]);
+
+        ProductSize::update($validated);
+// можно добавить чтобы название пропечатывалось в сообщении
+        return to_route('product-sizes.index')->with('succes', 'Размер обновлен');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+    public function destroy(ProductSize $size): RedirectResponse
     {
-        //
+        $size->delete();
+
+        return to_route('product-sizes.index')->with('success', 'Размер удален');
     }
 }
