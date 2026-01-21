@@ -9,11 +9,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
+/*
+ * TODO
+ * 0. корзина/заказы
+ * 1. tests
+ * 2. выводим админские контроллеры в отдельную директорию
+ * 3. docker
+ *  . debug  разобраться
+ * *4. статусы пользователя переделать в role
+ *
+ */
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): View
     {
         return view('products.index', [
@@ -29,12 +36,8 @@ class ProductController extends Controller
         return view('products.create', ['categories' => Category::all()]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request): RedirectResponse
     {
-//        dd($request);
         $data = $request->validate([
             'category_id' => 'required|numeric',
             'name' => 'required|string|max:255',
@@ -42,17 +45,16 @@ class ProductController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'price' => 'numeric|min:0|max:99999999'
         ]);
+
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
         }
+
         Product::create($data);
 
         return to_route('products.index')->with('success', $request->name . ' добавлен');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id): View
     {
         return \view('products.show', ['product' => Product::find($id)]);
@@ -69,9 +71,7 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, Product $product)
     {
         $data = $request->validate([
@@ -86,6 +86,7 @@ class ProductController extends Controller
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
+
             $data['image'] = $request->file('image')->store('products', 'public');
         }
 
@@ -94,12 +95,11 @@ class ProductController extends Controller
         return back()->with('success', 'Данные для ' . $product->name . ' обновлены');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Product $product): RedirectResponse
     {
         $product->delete();
+
         return to_route('products.index');
     }
 }

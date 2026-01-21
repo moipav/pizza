@@ -20,7 +20,13 @@
             <td>{{ $user->id }}</td>
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
-            <td>{{$user->status->name}}</td>
+            <td>
+                @if ($user->status)
+                    {{$user->status->name}}
+                @else
+                    Cтатус не задан
+                @endif
+            </td>
             <td>
                 <a class="btn btn-primary" href="{{ route('users.show', $user) }}">Просмотр</a>
                 <a class="btn btn-warning" href="{{ route('users.edit', $user) }}">Редактировать</a>
