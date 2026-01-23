@@ -7,22 +7,42 @@
     <table class="table">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Категория</th>
+            <th>Продукт</th>
+            <th>Вид продукта</th>
+            <th>Наименование</th>
+            <th>Размер(объем)</th>
+            <th>Единицы измерения</th>
         </tr>
         </thead>
         <tbody>
         @foreach($productSizes as $productSize)
             <tr>
-                <td>{{ $productSize->id }}</td>
-                <td>{{ $productSize->name }}</td>
+                <td>
+                    @if ($productSize->product->name)
+                        {{ $productSize->product->name }}
+                    @else
+                    <b>Продукт отсутствует, возможно он удален</b>
+                    @endif
+                </td>  <td>
+                    @if ($productSize->product->category->name)
+                        {{ $productSize->product->category->name }}
+                    @else
+                    <b>Категория продукта отсутствует, возможно она удалена</b>
+                    @endif
+                </td>
+                <td>{{ $productSize->size_name }}</td>
+                <td>{{ $productSize->size_value }}</td>
+                <td>{{ $productSize->unit }}</td>
+                <td>{{ $productSize->prise_adjustment }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('categories.show', $productSize) }}">Просмотр</a>
                     <a class="btn btn-warning" href="{{ route('categories.edit', $productSize) }}">Редактировать</a>
-                    <form action="{{ route('categories.destroy', $productSize) }}" method="POST" style="display:inline;">
+                    <form action="{{ route('categories.destroy', $productSize) }}" method="POST"
+                          style="display:inline;">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger" type="submit" onclick="return confirm('Удалить?')">Удалить</button>
+                        <button class="btn btn-danger" type="submit" onclick="return confirm('Удалить?')">Удалить
+                        </button>
                     </form>
                 </td>
             </tr>

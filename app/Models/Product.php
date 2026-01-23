@@ -33,7 +33,7 @@ class Product extends Model
     public function getFinalPrice(ProductSize $size = null)
     {
         if ($size) {
-            return $this->price +$size->priceAdjustment;
+            return $this->price + $size->priceAdjustment;
         }
 
         return $this->price;
