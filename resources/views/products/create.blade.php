@@ -27,7 +27,7 @@
         </div>
         <div>
             <label for="price" class="form-label">Цена:</label>
-            <input type="text" class="form-control" name="price" placeholder="Цена">
+            <input type="text" class="form-control" name="price" placeholder="Цена" value="{{old('price')}}">
         </div>
 
         <button type="submit">Отправить</button>

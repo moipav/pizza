@@ -12,6 +12,7 @@
             <th>Наименование</th>
             <th>Размер(объем)</th>
             <th>Единицы измерения</th>
+            <th>Добавленная стоимость</th>
         </tr>
         </thead>
         <tbody>
@@ -33,11 +34,11 @@
                 <td>{{ $productSize->size_name }}</td>
                 <td>{{ $productSize->size_value }}</td>
                 <td>{{ $productSize->unit }}</td>
-                <td>{{ $productSize->prise_adjustment }}</td>
+                <td>{{ $productSize->price_adjustment}}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ route('categories.show', $productSize) }}">Просмотр</a>
-                    <a class="btn btn-warning" href="{{ route('categories.edit', $productSize) }}">Редактировать</a>
-                    <form action="{{ route('categories.destroy', $productSize) }}" method="POST"
+                    <a class="btn btn-primary" href="{{ route('product-sizes.show', $productSize) }}">Просмотр</a>
+                    <a class="btn btn-warning" href="{{ route('product-sizes.edit', $productSize) }}">Редактировать</a>
+                    <form action="{{ route('product-sizes.destroy', $productSize) }}" method="POST"
                           style="display:inline;">
                         @csrf
                         @method('DELETE')

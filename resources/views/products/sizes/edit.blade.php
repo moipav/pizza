@@ -1,36 +1,66 @@
 @extends('layout')
 
 @section('content')
-    <h1>Изменить {{$product->name}}</h1>
+    <h1>Изменить размер для продукта {{$productSize->product->name}} . {{$productSize->size_value}}</h1>
 
-    <form action="{{ route('products.update', $product) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('product-sizes.update', $productSize) }}" method="POST">
         @csrf
         @method('PUT')
-        <div class="form-file form-file-sm">
-            <input type="file" class="form-file-input" id="customFileSm" name="image">
-        </div>
-        <div>
-            <select class="form-select" aria-label="Default select example" name="category_id">
-                <option value="{{old('id', $product->category->id)}}"
-                        selected>{{old('name', $product->category->name)}}</option>
-                @foreach($categories as $category)
-                    <option value="{{$category->id}}">{{$category->name}}</option>
-                @endforeach
-            </select>
-        </div>
-        <div>
-            <label for="name" class="form-label">Название:</label>
-            <input type="text" name="name" value="{{old('name', $product->name)}}" class="form-control" required>
-        </div>
-        <div>
-            <label for="description" class="form-label">Описание:</label>
-            <textarea name="description" class="form-control">{{old('description', $product->description)}}</textarea>
-        </div>
-        <div>
-            <label for="price" class="form-label">Цена:</label>
-            <input type="text" class="form-control" name="price" value="{{old('price', $product->price)}}">
-        </div>
+        <label for="product_id" class="form-label">Выберите или введите продукт</label>
+        <select class="form-select" aria-label="Default select example" name="product_id">
+            <option value="{{old('id', $productSize->product->id)}}"
+                    selected>{{old('name', $productSize->product->name)}}</option>
+            @foreach($products as $product)
+                <option value="{{$product->id}}">{{$product->name}}</option>
+            @endforeach
+        </select>
 
-        <button type="submit">Отправить</button>
+        <div>
+            <label for="size_name" class="form-label">Название размера</label>
+            <input list="size_name" name="size_name" class="form-control"
+                   required value="{{old('size_name', $productSize->size_name)}}">
+
+            <datalist id="size_name">
+                @foreach($productSizeNames as $productSizeName)
+                    <option value="{{$productSizeName}}">
+                @endforeach
+            </datalist>
+
+            <div>
+                <label for="size_value" class="form-label">Размер / объем:</label>
+                <input list="size_value" name="size_value"
+                       class="form-control" required value="{{old('size_value', $productSize->size_value)}}">
+                <datalist id="size_value">
+                    @foreach($productSizeValues as $productSizeValue)
+                        <option value="{{$productSizeValue}}">
+                    @endforeach
+                </datalist>
+            </div>
+
+            <div>
+                <label for="unit" class="form-label">Единицы измерения:</label>
+                <input list="unit" name="unit"
+                       class="form-control" required value="{{old('unit', $productSize->unit)}}">
+                <datalist id="unit">
+                    @foreach($productSizeUnits as $productSizeUnit)
+                        <option value="{{$productSizeUnit}}">
+                    @endforeach
+                </datalist>
+            </div>
+
+
+            <div>
+                <label for="price_adjustment" class="form-label">Добавочная стоимость</label>
+                <input list="price_adjustment" name="price_adjustment" class="form-control" required
+                       value="{{old('price_adjustment', $productSize->price_adjustment)}}">
+                <datalist id="price_adjustment">
+                    @foreach($priceAdjustments as $priceAdjustment)
+                        <option value="{{$priceAdjustment}}">
+                    @endforeach
+                </datalist>
+            </div>
+
+            <button type="submit">Отправить</button>
+        </div>
     </form>
 @endsection
