@@ -58,7 +58,7 @@ class ProductSizeController extends Controller
 
     public function show(string $id): View
     {
-        return view('products.sizes.show');
+        return view('products.sizes.show', ['productSize' => ProductSize::with('product')->findOrFail($id)]);
     }
 
 
