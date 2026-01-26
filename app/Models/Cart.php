@@ -20,7 +20,7 @@ class Cart extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    protected function statuses():BelongsTo
+    protected function status():BelongsTo
     {
         return $this->belongsTo(CartStatus::class, 'status_id');
     }

@@ -4,11 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CartItem extends Model
 {
-    //
+    protected $fillable = [
+        'cart_id',
+        'product_id',
+        'product_size_id',
+        'quantity',
+        'price_per_unit',
+    ];
 
     protected function cart():BelongsTo
     {

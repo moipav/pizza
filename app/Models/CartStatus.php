@@ -11,6 +11,9 @@ class CartStatus extends Model
     /** @use HasFactory<\Database\Factories\CartStatusFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+    ];
     protected function cart(): HasMany
     {
         return $this->hasMany(Cart::class);
