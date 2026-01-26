@@ -6,6 +6,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -56,6 +57,15 @@ class User extends Authenticatable
     protected function status(): BelongsTo
     {
         return $this->belongsTo(UserStatus::class, 'status_id'); //belongsTo — потому что у одного пользователя один статус
+    }
+
+    /**
+     * @return HasOne
+     * У одного пользоывателя одна корзина
+     */
+    protected function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class);
     }
 
 }
