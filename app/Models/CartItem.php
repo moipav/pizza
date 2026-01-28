@@ -15,18 +15,39 @@ class CartItem extends Model
         'price_per_unit',
     ];
 
-    protected function cart():BelongsTo
+    /**
+     * @return string[]
+     * приводим к нужному типу данных
+     */
+    protected function casts(): array
+    {
+
+        return [
+            'quantity' => 'integer',
+            'price_per_unit' => 'decimal:2'
+        ];
+    }
+
+    protected
+    function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class, 'cart_id');
     }
 
-    protected function product():BelongsTo
+    protected
+    function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    protected function productSize(): BelongsTo
+    protected
+    function productSize(): BelongsTo
     {
         return $this->belongsTo(ProductSize::class, 'product_size_id');
+    }
+
+    protected function getProductAttribute()
+    {
+        return $this->productSize()->product;
     }
 }
