@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-
+        return view('carts.index', [
+            'cart' => Cart::current()->load('items.productSize.product')
+                ]
+        );
     }
 
     /**

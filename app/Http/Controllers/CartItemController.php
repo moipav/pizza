@@ -10,25 +10,7 @@ use Illuminate\Http\Request;
 
 class CartItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -62,29 +44,10 @@ class CartItemController extends Controller
             ]);
         }
 
-        return to_route('cart.index')->with('success', 'Товар добавлен в корзину');
+        return to_route('home')->with('success', 'Товар добавлен в корзину');
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, CartItem $cartItem): RedirectResponse
     {
         if ($cartItem->cart_id !== Cart::current()->isDirty()) {
@@ -100,11 +63,15 @@ class CartItemController extends Controller
         return to_route('cart.index', );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+    public function destroy(CartItem $cartItem): RedirectResponse
     {
-        //
+        if ($cartItem->cart_id !== Cart::current()->id) {
+            abort(403);
+        }
+
+        $cartItem->delete();
+
+        return to_route('cart.index')->with('success', 'Товар удален');
     }
 }

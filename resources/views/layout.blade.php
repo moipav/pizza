@@ -9,7 +9,8 @@
 </head>
 <body>
 <header>
-    <ul class="nav">
+    <ul class="nav d-flex">
+{{--        @if(auth()->check() && auth()->user()->is_admin)--}}
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/users">users</a>
         </li>
@@ -28,7 +29,12 @@
         <li class="nav-item">
             <a class="nav-link disabled" aria-disabled="true">Disabled</a>
         </li>
+{{--        @endif--}}
+        <li class="nav-item ms-auto">
+            <a class="nav-link" href="/cart">Корзина</a>
+        </li>
     </ul>
+
 </header>
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>

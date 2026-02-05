@@ -22,7 +22,10 @@ class Cart extends Model
             //авторизованный пользователь - ищем по user_id
 
             return static::firstOrCreate(
-                ['user_id' => auth()->id(), 'status_id' => 1], // active
+                [
+                    'user_id' => auth()->id(),
+                    'status_id' => 1 // active пока так
+                ],
                 ['session_id' => null]
             );
         }
@@ -30,17 +33,20 @@ class Cart extends Model
         $sessionId = Session::getId();
 
         return static::firstOrCreate(
-            ['session_id' => $sessionId, 'status_id' => 1],
+            [
+                'session_id' => $sessionId,
+                'status_id' => 1
+            ],
             ['user_id' => null]
         );
     }
 
-    protected function user(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    protected function status(): BelongsTo
+    public function status(): BelongsTo
     {
         return $this->belongsTo(CartStatus::class, 'status_id');
     }

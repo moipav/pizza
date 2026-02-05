@@ -14,7 +14,8 @@ class Category extends Model
  * TODO подумаем насчет timestamps
  */
     public $timestamps = false;
-    protected function products(): HasMany
+
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class);//одна категория содержит много продуктов
     }

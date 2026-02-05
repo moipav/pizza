@@ -28,26 +28,24 @@ class CartItem extends Model
         ];
     }
 
-    protected
-    function cart(): BelongsTo
+    public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class, 'cart_id');
     }
 
-    protected
-    function product(): BelongsTo
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
-    protected
-    function productSize(): BelongsTo
+    public function productSize(): BelongsTo
     {
         return $this->belongsTo(ProductSize::class, 'product_size_id');
     }
 
-    protected function getProductAttribute()
-    {
-        return $this->productSize()->product;
-    }
+
+//    public function getProductAttribute()
+//    {
+//        return $this->productSize()->product();
+//    }
 }

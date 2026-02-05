@@ -19,7 +19,7 @@ class Product extends Model
         'image'
     ];
 
-    protected function category(): BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');// т.к. у одного продукта одна категория
     }
