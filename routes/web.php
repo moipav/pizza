@@ -19,7 +19,7 @@ Route::delete('/cart/items/{cartItem}', [CartItemController::class, 'destroy'])-
 
 //Route::post()
 //Админ часть
-Route::resource('statuses', \App\Http\Controllers\UserStatusController::class);
-Route::resource('products', \App\Http\Controllers\ProductController::class);
-Route::resource('categories', \App\Http\Controllers\CategoryController::class);
-Route::resource('product-sizes', \App\Http\Controllers\ProductSizeController::class);
+Route::resource('statuses', \App\Http\Controllers\Admin\UserStatusController::class);
+Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
+Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+Route::resource('product-sizes', \App\Http\Controllers\Admin\ProductSizeController::class);
