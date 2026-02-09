@@ -19,13 +19,13 @@
         @foreach($productSizes as $productSize)
             <tr>
                 <td>
-                    @if ($productSize->product->name)
+                    @if ($productSize->product?->name)
                         {{ $productSize->product->name }}
                     @else
                     <b>Продукт отсутствует, возможно он удален</b>
                     @endif
                 </td>  <td>
-                    @if ($productSize->product->category->name)
+                    @if ($productSize->product?->category->name)
                         {{ $productSize->product->category->name }}
                     @else
                     <b>Категория продукта отсутствует, возможно она удалена</b>
