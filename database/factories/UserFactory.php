@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\UserStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -24,8 +25,12 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake()->firstName(),
+            'surname' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
+            'phone' => '9' . implode(fake()->unique()->randomElements(range(1, 9),9, true)),
+            'date_of_birth' => fake()->dateTimeBetween('-120 years', '-12 years'),
+            'status_id' => UserStatus::query()->inRandomOrder()->first(),//добавил возможность случайного присвоения статуса
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
