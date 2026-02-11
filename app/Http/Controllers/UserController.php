@@ -29,7 +29,7 @@ class UserController extends Controller
             'surname' => 'required|string|max:255',
             'phone' => 'required|string|unique:users|max:10',
             'email' => 'required|string|email|unique:users|max:255',
-            'date_of_birth' => 'required|date|',//before_or_equal:today|after_or_equal:12 years ago',
+            'date_of_birth' => 'required|date|before_or_equal:12 years ago',
             'password' => 'required|min:8|confirmed'
         ]);
         $validated['status_id'] = 6;
@@ -41,16 +41,12 @@ class UserController extends Controller
 
     public function show(string $id): View
     {
-        $user = User::find($id);
-
-        return view('users.show', compact('user'));
+        return view('users.show', ['user' => User::findOrFail($id)]);
     }
 
     public function edit(string $id): View
     {
-        $user = User::find($id);
-
-        return view('users.edit', compact('user'));
+        return view('users.edit', ['user' => User::findOrFail($id)]);
     }
 
     public function update(Request $request, User $user): RedirectResponse
@@ -60,7 +56,7 @@ class UserController extends Controller
             'surname' => 'required|string|max:255',
             'phone' => 'required|string|max:10|unique:users,phone,' . $user->id,
             'email' => 'required|string|email|unique:users,email,' . $user->id . '|max:255',
-            'date_of_birth' => 'required|date|' //ограничить дату рождения например не младше 10 лет
+            'date_of_birth' => 'required|date|before_or_equal:12 years ago'
         ]);
 
 
@@ -73,6 +69,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'Пользователь удалён!');
+        return to_route('users.index')->with('success', 'Пользователь удалён!');
     }
 }
