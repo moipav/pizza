@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Route;
 
 //Главная страница
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Route::post('/cart/items', [CartItemController::class, 'store'])->name('cart.items.store');
+
 Route::resource('users', \App\Http\Controllers\UserController::class);
 
 //корзина
