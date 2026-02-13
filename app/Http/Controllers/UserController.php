@@ -32,10 +32,12 @@ class UserController extends Controller
             'date_of_birth' => 'required|date|before_or_equal:12 years ago',
             'password' => 'required|min:8|confirmed'
         ]);
-        $validated['status_id'] = 6;
+        $validated['status_id'] = 1;
         User::create($validated);
 
-        return to_route('users.index')->with('success', 'Пользователь добавлен');
+        return to_route('users.index')
+            ->with('success', 'Пользователь добавлен')
+            ->setStatusCode(303);
     }
 
 
