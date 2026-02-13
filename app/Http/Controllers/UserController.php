@@ -64,13 +64,17 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return to_route('users.show', $user)->with('success', 'Данные пользователя обновлены!');
+        return to_route('users.show', $user)
+            ->with('success', 'Данные пользователя обновлены!')
+            ->setStatusCode(303);
     }
 
     public function destroy(User $user)
     {
         $user->delete();
 
-        return to_route('users.index')->with('success', 'Пользователь удалён!');
+        return to_route('users.index')
+            ->with('success', 'Пользователь удалён!')
+            ->setStatusCode(303);
     }
 }
