@@ -27,9 +27,9 @@
                                     <!-- Изображение -->
                                     <div class="bg-light d-flex align-items-center justify-content-center"
                                          style="height: 200px;">
-                                        ><img src="{{\Illuminate\Support\Facades\Storage::url($product->image)}}"
+                                        <img src="{{\Illuminate\Support\Facades\Storage::url($product->image)}}"
                                               class="rounded mx-auto d-block" alt="на фото изображено {{$product->description}}" width="150"
-                                              height="150">"
+                                              height="150">
                                     </div>
 
                                     <div class="card-body d-flex flex-column">
