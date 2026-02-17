@@ -29,9 +29,7 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create(): View
     {
         return view('products.create', ['categories' => Category::all()]);
@@ -56,22 +54,22 @@ class ProductController extends Controller
         return to_route('products.index')->with('success', $request->name . ' добавлен');
     }
 
-    public function show(string $id): View
+    public function show(Product $product): View
     {
-        return \view('products.show', ['product' => Product::findOrFail($id)]);
+        return \view('products.show', ['product' => $product]);
     }
 
 
-    public function edit(string $id): View
+    public function edit(Product $product): View
     {
         return view('products.edit', [
-            'product' => Product::findOrFail($id),
+            'product' => $product,
             'categories' => Category::all()
         ]);
     }
 
 
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Product $product): RedirectResponse
     {
         $data = $request->validate([
             'category_id' => 'required|numeric|exists:categories,id',
