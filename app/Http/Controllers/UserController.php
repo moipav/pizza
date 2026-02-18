@@ -37,7 +37,7 @@ class UserController extends Controller
 
         return to_route('users.index')
             ->with('success', 'Пользователь добавлен')
-            ->setStatusCode(303);
+            ->setStatusCode(302);
     }
 
 
@@ -66,7 +66,7 @@ class UserController extends Controller
 
         return to_route('users.show', $user)
             ->with('success', 'Данные пользователя обновлены!')
-            ->setStatusCode(303);
+            ->setStatusCode(302);
     }
 
     public function destroy(User $user)
@@ -75,6 +75,6 @@ class UserController extends Controller
 
         return to_route('users.index')
             ->with('success', 'Пользователь удалён!')
-            ->setStatusCode(303);
+            ->setStatusCode(302);
     }
 }

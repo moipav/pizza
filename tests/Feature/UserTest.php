@@ -50,7 +50,7 @@ class UserTest extends TestCase
 
         $response = $this->post('/users', $userData);
         $response->assertSessionHasNoErrors();
-        $response->assertStatus(303);
+        $response->assertStatus(302);
         $response->assertRedirect('/users');
         $this->assertDatabaseHas('users', [
             'name' => 'Борис',
@@ -98,7 +98,7 @@ class UserTest extends TestCase
         ] ;
 
         $response = $this->put('/users/' . $user->id, $updatedData);
-        $response->assertStatus(303);
+        $response->assertStatus(302);
         $response->assertRedirect('/users/' . $user->id);
         $this->assertDatabaseHas('users', [
             'id' => $user->id,

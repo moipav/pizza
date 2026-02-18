@@ -51,7 +51,9 @@ class ProductController extends Controller
 
         Product::create($data);
 
-        return to_route('products.index')->with('success', $request->name . ' добавлен');
+        return to_route('products.index')
+            ->with('success', $request->name . ' добавлен')
+            ->setStatusCode(302);
     }
 
     public function show(Product $product): View
@@ -89,7 +91,9 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return back()->with('success', 'Данные для ' . $product->name . ' обновлены');
+        return to_route('products.edit', $product)
+            ->with('success', 'Данные для ' . $product->name . ' обновлены')
+            ->setStatusCode(302);
     }
 
 
@@ -97,6 +101,8 @@ class ProductController extends Controller
     {
         $product->delete();
 
-        return to_route('products.index');
+        return to_route('products.index')
+            ->with('success', 'Продукт удален')
+            ->setStatusCode(302);
     }
 }

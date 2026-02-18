@@ -59,7 +59,7 @@ class CategoryController extends Controller
     }
 
 
-    public function destroy(Category $category)
+    public function destroy(Category $category): RedirectResponse
     {
         try {
             $category->delete();
