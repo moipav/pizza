@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductSize;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -13,7 +14,7 @@ use Illuminate\View\View;
 /*
  * TODO
  * 0. корзина/заказы +/-
- * 1. tests
+ * 1. tests +ыфшд
  * 2. выводим админские контроллеры в отдельную директорию +
  * 3. docker
  *  . debug  разобраться
@@ -100,6 +101,7 @@ class ProductController extends Controller
     public function destroy(Product $product): RedirectResponse
     {
         $product->delete();
+        $productSizes = ProductSize::where('product_id', $product->id)->delete();
 
         return to_route('products.index')
             ->with('success', 'Продукт удален')
