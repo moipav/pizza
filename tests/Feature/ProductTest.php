@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -13,10 +12,6 @@ use Tests\TestCase;
 class ProductTest extends TestCase
 {
     use RefreshDatabase;
-
-    /**
-     * A basic feature test example.
-     */
 
 
     public function test_product_index(): void
@@ -40,12 +35,11 @@ class ProductTest extends TestCase
      */
     public function test_product_store(): void
     {
-        Storage::fake('products');
+        Storage::fake('public');
         $image = UploadedFile::fake()->image('pizza.jpg');
-        Category::create(['id' => '1', 'name' => 'Пицца']
-        );
+        $category = Category::create(['id' => '1', 'name' => 'Пицца']);
         $product = [
-            'category_id' => 1,
+            'category_id' => $category->id,
             'name' => 'Маргарита',
             'description' => 'Самая популярная пицца в италии',
             'image' => $image,
@@ -67,9 +61,10 @@ class ProductTest extends TestCase
 
     public function test_product_show(): void
     {
-        Category::create(['id' => '1', 'name' => 'Пицца']);
+        Storage::fake('public');
+        $category = Category::create(['id' => '1', 'name' => 'Пицца']);
 
-        $product = Product::factory()->create()::first();
+        $product = Product::factory()->create(['category_id' => $category->id])::first();
 
         $response = $this->get('/products/' . $product->id);
         $response->assertStatus(200);
@@ -81,8 +76,10 @@ class ProductTest extends TestCase
 
     public function test_product_edit_page(): void
     {
-        Category::create(['id' => '1', 'name' => 'Пицца']);
-        $product = Product::factory()->create()::first();
+        Storage::fake('public');
+//        $image = UploadedFile::fake()->image('pizza.jpg');
+        $category= Category::create(['id' => '1', 'name' => 'Пицца']);
+        $product = Product::factory()->create(['category_id' => $category->id]);
         $response = $this->get('/products/' . $product->id . '/edit');
         $response->assertStatus(200);
         $response->assertViewIs('products.edit');
@@ -91,18 +88,18 @@ class ProductTest extends TestCase
 
     public function test_product_update(): void
     {
-        Category::create(['id' => '1', 'name' => 'Пицца']);
-
-        $product = Product::factory()->create()::first();
+        Storage::fake('public');
+        $category = Category::create(['id' => '1', 'name' => 'Пицца']);
+        $product = Product::factory()->create(['category_id' => $category->id]);
 
         $updatedData = [
-            'category_id' => 1,
+            'category_id' => $category->id,
             'name' => 'Маргарита',
             'description' => 'Самая популярная пицца в италии',
             'price' => 599
         ];
 
-        $response = $this->put('/products/' . $product->id, $updatedData);
+        $response = $this->patch('/products/' . $product->id, $updatedData);
         $response->assertStatus(302);
         $response->assertRedirect('/products/' . $product->id . '/edit');
         $this->assertDatabaseHas('products', $updatedData);
@@ -110,8 +107,13 @@ class ProductTest extends TestCase
 
     public function test_product_destroy(): void
     {
-        Category::create(['id' => '1', 'name' => 'Пицца']);
-        Product::factory(2)->create();
+        Storage::fake('public');
+        $image = UploadedFile::fake()->image('pizza.jpg');
+
+        $category = Category::create(['id' => '1', 'name' => 'Пицца']);
+        Product::factory(2)->create([
+            'category_id' => $category->id,
+            'image' => $image]);
 
         $product = Product::first();
 
@@ -125,8 +127,6 @@ class ProductTest extends TestCase
         $this->assertSoftDeleted('products', ['id' => $product->id]);
         //Здесь у нас получается проверить, только на то,что пометили SoftDelete а count у БД все равно 2
         $this->assertDatabaseCount('products', 2);
-
-
     }
 
 }

@@ -118,7 +118,7 @@ class UserTest extends TestCase
 
         $response = $this->delete('/users/' . $user->id);
 
-        $response->assertStatus(303);
+        $response->assertStatus(302);
         $response->assertRedirect('/users');
         $response->assertSessionHas('success', 'Пользователь удалён!');
         $this->assertSoftDeleted('users', ['id' => $user->id]);
