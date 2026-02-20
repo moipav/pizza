@@ -10,6 +10,9 @@
 <body>
 <header>
     <ul class="nav d-flex">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">Главная страница</a>
+        </li>
 {{--        @if(auth()->check() && auth()->user()->is_admin)--}}
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/users">users</a>

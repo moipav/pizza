@@ -84,6 +84,7 @@ class ProductTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewIs('products.edit');
         $response->assertViewHas('product', $product);
+
     }
 
     public function test_product_update(): void
