@@ -17,13 +17,12 @@ class ProductTest extends TestCase
     public function test_product_index(): void
     {
         $response = $this->get('/');
-
         $response->assertStatus(200);
     }
 
     public function test_product_create_page(): void
     {
-        $response = $this->get('/products/create');
+        $response = $this->get(route('products.create'));
 
         $response->assertStatus(200);
         $response->assertViewIs('products.create');//проверяем шаблон
@@ -49,7 +48,7 @@ class ProductTest extends TestCase
         $response = $this->post('/products', $product);
         $response->assertSessionHasNoErrors();
         $response->assertStatus(302);
-        $response->assertRedirect('/products');
+        $response->assertRedirect(route('products.index'));
         $this->assertDatabaseHas('products', [
             'name' => 'Маргарита',
             'description' => 'Самая популярная пицца в италии',
@@ -59,14 +58,14 @@ class ProductTest extends TestCase
         $this->assertDatabaseCount('products', 1);
     }
 
-    public function test_product_show(): void
+    public function test_product_show_page(): void
     {
         Storage::fake('public');
         $category = Category::create(['id' => '1', 'name' => 'Пицца']);
 
         $product = Product::factory()->create(['category_id' => $category->id])::first();
 
-        $response = $this->get('/products/' . $product->id);
+        $response = $this->get(route('products.show', $product));
         $response->assertStatus(200);
         $response->assertViewHas('product');
         $response->assertViewHas('product', $product);
@@ -80,7 +79,7 @@ class ProductTest extends TestCase
 //        $image = UploadedFile::fake()->image('pizza.jpg');
         $category= Category::create(['id' => '1', 'name' => 'Пицца']);
         $product = Product::factory()->create(['category_id' => $category->id]);
-        $response = $this->get('/products/' . $product->id . '/edit');
+        $response = $this->get(route('products.edit', $product));
         $response->assertStatus(200);
         $response->assertViewIs('products.edit');
         $response->assertViewHas('product', $product);
@@ -120,7 +119,7 @@ class ProductTest extends TestCase
 
         $this->assertDatabaseCount('products', 2);
 
-        $response = $this->delete('/products/' . $product->id);
+        $response = $this->delete(route('products'), $product->id);
 
         $response->assertStatus(302);
         $response->assertRedirect('/products');

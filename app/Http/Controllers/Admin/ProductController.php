@@ -101,7 +101,7 @@ class ProductController extends Controller
     public function destroy(Product $product): RedirectResponse
     {
         $product->delete();
-        $productSizes = ProductSize::where('product_id', $product->id)->delete();
+        ProductSize::where('product_id', $product->id)->delete();
 
         return to_route('products.index')
             ->with('success', 'Продукт удален')

@@ -53,21 +53,23 @@ class ProductSizeController extends Controller
 
         ProductSize::create($validated);
 
-        return to_route('product-sizes.index')->with('success', 'Новый размер добавлен');
+        return to_route('product-sizes.index')
+            ->with('success', 'Новый размер добавлен')
+            ->setStatusCode(302);
     }
 
 
-    public function show(string $id): View
+    public function show(ProductSize $productSize): View
     {
-        return view('products.sizes.show', ['productSize' => ProductSize::with('product')->findOrFail($id)]);
+        return view('products.sizes.show', ['productSize' =>$productSize]);
     }
 
 
-    public function edit(string $id): View
+    public function edit(ProductSize $productSize): View
     {
         return view('products.sizes.edit', [
-            'products' => Product::all(),
-            'productSize' => ProductSize::find($id),
+            'products' => $productSize->product(),
+            'productSize' => $productSize,
             'productSizeNames' => ProductSize::distinct()->pluck('size_name'),
             'productSizeValues' => ProductSize::distinct()->pluck('size_value'),
             'productSizeUnits' => ProductSize::distinct()->pluck('unit'),
@@ -96,7 +98,9 @@ class ProductSizeController extends Controller
 
         $productSize->update($validated);
 
-        return to_route('product-sizes.index')->with('success', 'Размер обновлен');
+        return to_route('product-sizes.index')
+            ->with('success', 'Размер обновлен')
+            ->setStatusCode(302);
     }
 
 
@@ -104,6 +108,8 @@ class ProductSizeController extends Controller
     {
         $size->delete();
 
-        return to_route('product-sizes.index')->with('success', 'Размер удален');
+        return to_route('product-sizes.index')
+            ->with('success', 'Размер удален')
+            ->setStatusCode(302);
     }
 }
