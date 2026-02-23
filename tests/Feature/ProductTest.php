@@ -111,18 +111,16 @@ class ProductTest extends TestCase
         $image = UploadedFile::fake()->image('pizza.jpg');
 
         $category = Category::create(['id' => '1', 'name' => 'Пицца']);
-        Product::factory(2)->create([
-            'category_id' => $category->id,
-            'image' => $image]);
+        Product::factory(2)->for($category)->create();
 
         $product = Product::first();
 
         $this->assertDatabaseCount('products', 2);
 
-        $response = $this->delete(route('products'), $product->id);
+        $response = $this->delete(route('products.destroy', $product->id));
 
         $response->assertStatus(302);
-        $response->assertRedirect('/products');
+        $response->assertRedirect(route('products.index'));
         $response->assertSessionHas('success', 'Продукт удален');
         $this->assertSoftDeleted('products', ['id' => $product->id]);
         //Здесь у нас получается проверить, только на то,что пометили SoftDelete а count у БД все равно 2

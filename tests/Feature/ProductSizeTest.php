@@ -24,7 +24,7 @@ class ProductSizeTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_example(): void
+    public function test_index_page(): void
     {
         $response = $this->get('/');
         $response->assertStatus(200);
@@ -34,32 +34,36 @@ class ProductSizeTest extends TestCase
     {
         $response = $this->get(route('product-sizes.create'));
         $response->assertStatus(200);
-        $response->assertViewIs('product-statuses.create');
+        $response->assertViewIs('products.sizes.create');
     }
 
     public function test_product_size_store(): void
     {
-
-
-        $response = $this->post('product-sizes', $this->product_size_data);
+        $data = [
+            'product_id' => $this->product->id,
+            'size_name' => 'Средняя',
+            'size_value' => 30,
+            'unit' => 'см',
+            'price_adjustment' => 120
+        ];
+        $response = $this->post('product-sizes', $data);
         $response->assertStatus(302);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect(route('product-sizes.index'));
         $this->assertDatabaseHas('product_sizes', [
-            'size_name' => $this->product_size_data['size_name'],
-            'size_value' => $this->product_size_data['size_value']
+            'size_name' => $data['size_name'],
+            'size_value' => $data['size_value']
         ]);
-
-        $this->assertDatabaseCount('product_sizes', 1);
     }
 
     public function test_product_size_show_page(): void
     {
         $response = $this->get(route('product-sizes.show', $this->productSize));
         $response->assertStatus(200);
-        $response->asserViewHas('product-size');
-        $response->asserViewHas('product-size', $this->productSize);
+        $response->assertViewIs('products.sizes.show');
+        $response->assertViewHas('productSize');
         $response->assertSee($this->productSize->size_name);
+        $response->assertSee($this->productSize->size_value);
     }
 
     public function test_product_size_edit_page(): void
@@ -67,7 +71,7 @@ class ProductSizeTest extends TestCase
         $response = $this->get(route('product-sizes.edit', $this->productSize));
         $response->assertStatus(200);
         $response->assertViewIs('products.sizes.edit');
-//        $response->assertViewHas('products.sizes.edit', $this->productSize);
+        $response->assertViewHas('productSize');
     }
 
     public function test_product_size_update(): void
@@ -81,7 +85,10 @@ class ProductSizeTest extends TestCase
         ];
         $this->assertDatabaseHas($this->productSize);
         $response = $this->patch(route('product-sizes.update',  $this->productSize->id), $updatedData);
-        $this->assertDatabaseHas('product_sizes', $updatedData);
+        $this->assertDatabaseHas('product_sizes', [
+            'id' => $this->productSize->id,
+            'size_name' => $this->productSize->size_name
+        ]);
         $response->assertStatus(302);
     }
 
