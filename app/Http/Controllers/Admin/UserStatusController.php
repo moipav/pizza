@@ -42,11 +42,11 @@ class UserStatusController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Подумаю что сюда прикрутить
      */
-    public function show(string $id): View
+    public function show(UserStatus $status): View
     {
-        return view('users.statuses.show', ['userStatus' => UserStatus::find($id)]);
+        return view('users.statuses.show', ['status' => $status]);
     }
 
     /**

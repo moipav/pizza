@@ -12,6 +12,7 @@ use Tests\TestCase;
 class UserTest extends TestCase
 {
     use RefreshDatabase;
+
 //    protected bool $seed = true;
 
     public function test_users_index(): void
@@ -30,13 +31,12 @@ class UserTest extends TestCase
     }
 
 
-
     /**
      * @throws \JsonException
      */
     public function test_user_store(): void
     {
-        UserStatus::create(['id'=>'1', 'name' => 'New User']
+        UserStatus::create(['id' => '1', 'name' => 'New User']
         );
         $userData = [
             'name' => 'Борис',
@@ -95,7 +95,7 @@ class UserTest extends TestCase
             'phone' => '1234567890',
             'email' => 'b.razor@sikle.bb',
             'date_of_birth' => '1988-02-24',
-        ] ;
+        ];
 
         $response = $this->put('/users/' . $user->id, $updatedData);
         $response->assertStatus(302);

@@ -6,15 +6,6 @@
 
         <table class="table">
             <thead>
-{{--            <tr>--}}
-{{--                <th>Изображение</th>--}}
-{{--                <th>Товар</th>--}}
-{{--                <th>Размер</th>--}}
-{{--                <th>Цена</th>--}}
-{{--                <th>количество</th>--}}
-{{--                <th>Действия</th>--}}
-{{--            </tr>--}}
-{{--            </thead>--}}
             <tbody>
             @foreach($cart->items as $item)
                 <tr>
@@ -62,7 +53,6 @@
             </tr>
             </tfoot>
         </table>
-        {{--        <a href="{{ route('checkout') }}" class="btn btn-success">Оформить заказ</a>--}}
     @else
         <p>Ваша корзина пуста</p>
         <a href="{{ route('home') }}"> Перейти к покупкам</a>

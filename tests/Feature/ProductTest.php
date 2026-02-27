@@ -77,7 +77,7 @@ class ProductTest extends TestCase
     {
         Storage::fake('public');
 //        $image = UploadedFile::fake()->image('pizza.jpg');
-        $category= Category::create(['id' => '1', 'name' => 'Пицца']);
+        $category = Category::create(['id' => '1', 'name' => 'Пицца']);
         $product = Product::factory()->create(['category_id' => $category->id]);
         $response = $this->get(route('products.edit', $product));
         $response->assertStatus(200);

@@ -44,7 +44,7 @@ class CartItemController extends Controller
             ]);
         }
 
-        return to_route('home')->with('success', 'Товар добавлен в корзину');
+        return to_route('home')->with('success', 'Товар добавлен в корзину')->setStatusCode(302);
 
     }
 
@@ -60,7 +60,9 @@ class CartItemController extends Controller
 
         $cartItem->update(['quantity' => $request->quantity]);
 
-        return to_route('cart.index', );
+        return to_route('cart.index')
+            ->with('success', 'Данные обновлены')
+            ->setStatusCode(302);
     }
 
 
@@ -72,6 +74,8 @@ class CartItemController extends Controller
 
         $cartItem->delete();
 
-        return to_route('cart.index')->with('success', 'Товар удален');
+        return to_route('cart.index')
+            ->with('success', 'Товар удален')
+            ->setStatusCode(302);
     }
 }
