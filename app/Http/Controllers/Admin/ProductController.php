@@ -92,7 +92,7 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return to_route('products.edit', $product)
+        return to_route('products.index', $product)
             ->with('success', 'Данные для ' . $product->name . ' обновлены')
             ->setStatusCode(302);
     }

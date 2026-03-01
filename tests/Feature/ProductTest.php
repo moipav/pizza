@@ -14,6 +14,10 @@ class ProductTest extends TestCase
     use RefreshDatabase;
 
 
+    private $image;
+    private $category;
+    private $product;
+
     public function test_product_index(): void
     {
         $response = $this->get('/');
@@ -34,25 +38,21 @@ class ProductTest extends TestCase
      */
     public function test_product_store(): void
     {
-        Storage::fake('public');
-        $image = UploadedFile::fake()->image('pizza.jpg');
-        $category = Category::create(['id' => '1', 'name' => 'Пицца']);
-        $product = [
-            'category_id' => $category->id,
-            'name' => 'Маргарита',
-            'description' => 'Самая популярная пицца в италии',
-            'image' => $image,
-            'price' => 599
+        $product_store = [
+            'category_id' => 1,
+            'name' => 'Тест',
+            'description' => 'описание',
+            'image' => $this->image,
+            'price' => '999'
         ];
-
-        $response = $this->post('/products', $product);
-        $response->assertSessionHasNoErrors();
+        $response = $this->post(route('products.store', $product_store));
+//        $response->assertSessionHasNoErrors();
         $response->assertStatus(302);
         $response->assertRedirect(route('products.index'));
         $this->assertDatabaseHas('products', [
-            'name' => 'Маргарита',
-            'description' => 'Самая популярная пицца в италии',
-            'price' => 599
+            'name' => $this->product->name,
+            'description' => $this->product->description,
+            'price' => $this->product->price
 
         ]);
         $this->assertDatabaseCount('products', 1);
@@ -60,59 +60,42 @@ class ProductTest extends TestCase
 
     public function test_product_show_page(): void
     {
-        Storage::fake('public');
-        $category = Category::create(['id' => '1', 'name' => 'Пицца']);
-
-        $product = Product::factory()->create(['category_id' => $category->id])::first();
-
-        $response = $this->get(route('products.show', $product));
+        $response = $this->get(route('products.show', $this->product));
         $response->assertStatus(200);
         $response->assertViewHas('product');
-        $response->assertViewHas('product', $product);
-        $response->assertSee($product->name);
+        $response->assertViewHas('product', $this->product);
+        $response->assertSee($this->product->name);
 
     }
 
     public function test_product_edit_page(): void
     {
-        Storage::fake('public');
-//        $image = UploadedFile::fake()->image('pizza.jpg');
-        $category = Category::create(['id' => '1', 'name' => 'Пицца']);
-        $product = Product::factory()->create(['category_id' => $category->id]);
-        $response = $this->get(route('products.edit', $product));
+        $response = $this->get(route('products.edit', $this->product));
         $response->assertStatus(200);
         $response->assertViewIs('products.edit');
-        $response->assertViewHas('product', $product);
+        $response->assertViewHas('product', $this->product);
 
     }
 
     public function test_product_update(): void
     {
-        Storage::fake('public');
-        $category = Category::create(['id' => '1', 'name' => 'Пицца']);
-        $product = Product::factory()->create(['category_id' => $category->id]);
-
         $updatedData = [
-            'category_id' => $category->id,
-            'name' => 'Маргарита',
-            'description' => 'Самая популярная пицца в италии',
-            'price' => 599
+            'category_id' => $this->product->category->id,
+            'name' => 'Пепперони',
+            'description' => 'Еще одна популярная пицца в италии',
+            'price' => 699
         ];
 
-        $response = $this->patch('/products/' . $product->id, $updatedData);
+        $response = $this->patch(route('products.update', $this->product), $updatedData);
         $response->assertStatus(302);
-        $response->assertRedirect('/products/' . $product->id . '/edit');
+        $response->assertRedirect(route('products.index', $this->product));
         $this->assertDatabaseHas('products', $updatedData);
     }
 
     public function test_product_destroy(): void
     {
-        Storage::fake('public');
-        $image = UploadedFile::fake()->image('pizza.jpg');
-
         $category = Category::create(['id' => '1', 'name' => 'Пицца']);
-        Product::factory(2)->for($category)->create();
-
+        Product::factory()->for($category)->create();
         $product = Product::first();
 
         $this->assertDatabaseCount('products', 2);
@@ -127,4 +110,18 @@ class ProductTest extends TestCase
         $this->assertDatabaseCount('products', 2);
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Storage::fake('public');
+        $this->image = UploadedFile::fake()->image('pizza.jpg');
+//        $this->category = Category::create(['id' => '1', 'name' => 'Пицца']);
+        $this->product = Product::create([
+            'category_id' => Category::create(['id' => '1', 'name' => 'Пицца'])->id,
+            'name' => 'Маргарита',
+            'description' => 'Самая популярная пицца в италии',
+            'image' => $this->image,
+            'price' => 599
+        ]);
+    }
 }
