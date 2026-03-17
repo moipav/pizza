@@ -38,14 +38,15 @@ class ProductTest extends TestCase
      */
     public function test_product_store(): void
     {
+        $img = UploadedFile::fake()->image('pizza.jpg', 100, 100, 'image/jpeg');
         $product_store = [
             'category_id' => 1,
             'name' => 'Тест',
             'description' => 'описание',
-            'image' => $this->image,
+            'image' => $img,
             'price' => '999'
         ];
-        $response = $this->post(route('products.store', $product_store));
+        $response = $this->post(route('products.store'), $product_store);
 //        $response->assertSessionHasNoErrors();
         $response->assertStatus(302);
         $response->assertRedirect(route('products.index'));
@@ -55,7 +56,7 @@ class ProductTest extends TestCase
             'price' => $this->product->price
 
         ]);
-        $this->assertDatabaseCount('products', 1);
+        $this->assertDatabaseCount('products', 2);
     }
 
     public function test_product_show_page(): void
