@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use Illuminate\Support\Facades\Route;
@@ -25,3 +26,11 @@ Route::resource('statuses', \App\Http\Controllers\Admin\UserStatusController::cl
 Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
 Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
 Route::resource('product-sizes', \App\Http\Controllers\Admin\ProductSizeController::class);
+
+#Регистрация
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
+
+Route::get('/login', function () {
+    echo 'Здесь будет логин';
+})->name('login');
