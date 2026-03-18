@@ -13,7 +13,8 @@
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/">Главная страница</a>
         </li>
-{{--        @if(auth()->check() && auth()->user()->is_admin)--}}
+
+        {{--        @if(auth()->check() && auth()->user()->is_admin)--}}
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/users">users</a>
         </li>
@@ -34,6 +35,9 @@
         </li>
 {{--        @endif--}}
         <li class="nav-item ms-auto">
+            @if(auth()->check())
+                Добро пожаловать @php echo auth()->user()->name @endphp
+            @endif
             <a class="nav-link" href="/cart">Корзина</a>
         </li>
     </ul>
