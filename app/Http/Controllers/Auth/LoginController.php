@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class LoginController extends Controller
@@ -15,11 +16,30 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        dd($request->request->all());
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('home'));
+            #переадресация либо на запрашиваемую страницу, либо на /home
+        }
+
+        return back()->withErrors([
+            'email' => 'Неверные данные для входа'
+        ])->onlyInput('email');
+        #сохранит только email
     }
 
     public function logout(Request $request)
     {
-
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 }

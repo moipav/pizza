@@ -3,12 +3,12 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSizeController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserStatusController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 #Думаю потом придется разобрать эти роуты, для ограничения доступа к их редактированию
