@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @method static insert(array[] $array)
+ */
 class UserStatus extends Model
 {
     /*

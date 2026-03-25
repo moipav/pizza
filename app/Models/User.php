@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->belongsTo(UserStatus::class, 'status_id'); //belongsTo — потому что у одного пользователя один статус
     }
 
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
     /**
      * @return HasOne
      * У одного пользоывателя одна корзина
