@@ -95,8 +95,7 @@ class ProductTest extends TestCase
 
     public function test_product_destroy(): void
     {
-        $category = Category::create(['id' => '1', 'name' => 'Пицца']);
-        Product::factory()->for($category)->create();
+        Product::factory()->for($this->category)->create();
         $product = Product::first();
 
         $this->assertDatabaseCount('products', 2);
@@ -116,9 +115,9 @@ class ProductTest extends TestCase
         parent::setUp();
         Storage::fake('public');
         $this->image = UploadedFile::fake()->image('pizza.jpg');
-//        $this->category = Category::create(['id' => '1', 'name' => 'Пицца']);
+        $this->category = Category::create(['id' => '1', 'name' => 'Пицца']);
         $this->product = Product::create([
-            'category_id' => Category::create(['id' => '1', 'name' => 'Пицца'])->id,
+            'category_id' => $this->category->id,
             'name' => 'Маргарита',
             'description' => 'Самая популярная пицца в италии',
             'image' => $this->image,

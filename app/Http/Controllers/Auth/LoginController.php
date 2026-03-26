@@ -29,9 +29,11 @@ class LoginController extends Controller
             #переадресация либо на запрашиваемую страницу, либо на /home
         }
 
-        return back()->withErrors([
-            'email' => 'Неверные данные для входа'
-        ])->onlyInput('email');
+        return back()
+            ->setStatusCode(401)
+            ->withErrors([
+                'email' => 'Неверные данные для входа'
+            ])->onlyInput('email');
         #сохранит только email
     }
 
@@ -40,6 +42,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect(route('home'));
     }
 }
