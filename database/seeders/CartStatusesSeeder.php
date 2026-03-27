@@ -14,10 +14,10 @@ class CartStatusesSeeder extends Seeder
     public function run(): void
     {
         CartStatus::insert([
-            ['id' => 1, 'name' => 'active'],
-            ['id' => 2, 'name' => 'ordered'],
-            ['id' => 3, 'name' => 'abandoned'],
-            ['id' => 4, 'name' => 'cancelled'],
+            ['id' => 1, 'name' => 'active', 'created_at' => \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now()],
+            ['id' => 2, 'name' => 'ordered', 'created_at' => \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now()],
+            ['id' => 3, 'name' => 'abandoned', 'created_at' => \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now()],
+            ['id' => 4, 'name' => 'cancelled', 'created_at' => \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now()],
         ]);
     }
 }
