@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 #Думаю потом придется разобрать эти роуты, для ограничения доступа к их редактированию
 
 //Главная страница
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::resource('users', UserController::class);
@@ -25,17 +26,21 @@ Route::put('/cart/items/{cartItem}', [CartItemController::class, 'update'])->nam
 Route::delete('/cart/items/{cartItem}', [CartItemController::class, 'destroy'])->name('cart.items.destroy');
 
 //Админ часть
+
 Route::resource('statuses', UserStatusController::class);
 Route::resource('products', ProductController::class);
 Route::resource('categories', CategoryController::class);
 Route::resource('product-sizes', ProductSizeController::class);
 
 #Регистрация
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register')->middleware('guest');
-Route::post('/register', [RegisterController::class, 'register']);
-
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register')->middleware('guest');
+    Route::post('/register', [RegisterController::class, 'register']);
 #login
-Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
+    Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
+});
+
+
 #logout
-Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout')->middleware('auth');
