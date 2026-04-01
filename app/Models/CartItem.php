@@ -43,9 +43,4 @@ class CartItem extends Model
         return $this->belongsTo(ProductSize::class, 'product_size_id');
     }
 
-
-//    public function getProductAttribute()
-//    {
-//        return $this->productSize()->product();
-//    }
 }

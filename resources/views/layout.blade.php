@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'pizza')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="/pizza.png">
 </head>
 <body>
@@ -33,10 +34,13 @@
         <li class="nav-item">
             <a class="nav-link disabled" aria-disabled="true">Disabled</a>
         </li>
-{{--        @endif--}}
+        {{--        @endif--}}
         <li class="nav-item ms-auto">
             @if(auth()->check())
                 Добро пожаловать @php echo auth()->user()->name @endphp
+                <a class="nav-link" href="/logout">Выход</a>
+            @else
+                <a class="nav-link" href="/login">Войти</a>
             @endif
             <a class="nav-link" href="/cart">Корзина</a>
         </li>
@@ -56,6 +60,13 @@
     </div>
 @endif
 @yield('content')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+@php
+$user = auth()->user();
+//$session = session()->getId();
+//dd($user, $session);
+@endphp
 </body>
 </html>
