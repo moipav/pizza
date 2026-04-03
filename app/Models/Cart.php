@@ -31,7 +31,7 @@ class Cart extends Model
         }
         //гость - используем session_id
         $sessionId = Session::getId();
-
+        cookie()->queue('guestID', $sessionId, 60*24);
         return static::firstOrCreate(
             [
                 'session_id' => $sessionId,
