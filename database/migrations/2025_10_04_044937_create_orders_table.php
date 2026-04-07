@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete(); // для гостей null
             $table->string('session_id')->nullable(); //если гость
-            $table->string('status'); // pending, confirmed, delivered, canceled
+            $table->string('status')->default('pending'); // pending, confirmed, delivered, canceled
             $table->decimal('total', 10, 2);
             $table->string('delivery_address')->nullable();
-            $table->string('phone');
-            $table->string('email');
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
 
         });
