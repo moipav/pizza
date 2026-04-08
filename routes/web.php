@@ -46,7 +46,3 @@ Route::middleware('guest')->group(function () {
 #logout
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
-
-Route::get('test', function () {
-    dd(\App\Models\CartStatus::where('name', 'active')->first());
-});

@@ -21,7 +21,6 @@ class CartItem extends Model
      */
     protected function casts(): array
     {
-
         return [
             'quantity' => 'integer',
             'price_per_unit' => 'decimal:2'
