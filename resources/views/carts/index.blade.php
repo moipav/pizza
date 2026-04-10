@@ -6,6 +6,14 @@
 
         <table class="table">
             <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Размер</th>
+                <th>Цена</th>
+                <th>Кол-во</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
             <tbody>
             @foreach($cart->items as $item)
                 <tr>
@@ -50,9 +58,15 @@
                         Р.
                     </strong>
                 </td>
+
             </tr>
             </tfoot>
         </table>
+        <div class="d-flex justify-content-end mt-3">
+            <a href="{{ route('orders.create') }}" class="btn btn-primary btn-lg">
+                Перейти к оформлению
+            </a>
+        </div>
     @else
         <p>Ваша корзина пуста</p>
         <a href="{{ route('home') }}"> Перейти к покупкам</a>

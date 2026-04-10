@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 #Думаю потом придется разобрать эти роуты, для ограничения доступа к их редактированию
@@ -26,6 +27,11 @@ Route::post('/cart/items', [CartItemController::class, 'store'])->name('cart.ite
 Route::put('/cart/items/{cartItem}', [CartItemController::class, 'update'])->name('cart.items.update');
 Route::delete('/cart/items/{cartItem}', [CartItemController::class, 'destroy'])->name('cart.items.destroy');
 
+
+//Оформление заказа
+Route::get('/orders/index', [OrderController::class, 'index'])->name('orders.index');//->middleware('auth');
+Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
 //Админ часть
 
 Route::resource('statuses', UserStatusController::class);

@@ -45,6 +45,7 @@
             <a class="nav-link" href="/cart">Корзина</a>
         </li>
     </ul>
+    <h1>@yield('title')</h1>
 
 </header>
 @if(session('success'))

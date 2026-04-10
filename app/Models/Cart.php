@@ -20,11 +20,9 @@ class Cart extends Model
     {
         if (auth()->check()) {
             //авторизованный пользователь - ищем по user_id
-
             return static::firstOrCreate(
                 [
                     'user_id' => auth()->id(),
-                    'status_id' => 1 // active пока так
                 ],
                 ['session_id' => null]
             );
@@ -35,7 +33,6 @@ class Cart extends Model
         return static::firstOrCreate(
             [
                 'session_id' => $sessionId,
-                'status_id' => 1
             ],
             ['user_id' => null]
         );
