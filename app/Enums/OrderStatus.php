@@ -20,7 +20,5 @@ enum OrderStatus: string
             self::DELIVERED => 'Доставлен',
             self::CANCELLED => 'Отменен',
     };
-
-
     }
 }

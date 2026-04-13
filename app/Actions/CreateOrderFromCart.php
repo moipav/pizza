@@ -13,11 +13,10 @@ class CreateOrderFromCart
     public function __invoke(Cart $cart, array $data): Order
     {
         return DB::transaction(function () use ($cart, $data) {
-            $cart->load(['items.product', 'items.productSize']);
-//dd($cart->items->isEmpty());
-//            if ($cart->items->isEmpty()) {
-//                return to_route('cart.index')->with('error', 'Корзина пуста');
-//            }
+            $cart->loadMissing(['items.product', 'items.productSize']);
+            if ($cart->items->isEmpty()) {
+               throw new \Exception('Корзина пуста');
+            }
 
             $order = Order::create([
                 'user_id' => $cart->user_id ?? null,

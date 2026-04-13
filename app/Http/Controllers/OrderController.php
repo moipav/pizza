@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\CreateOrderFromCart;
 use App\Models\Cart;
+use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -14,13 +15,14 @@ class OrderController extends Controller
     {
         return view('orders.index', []);
     }
-    public function create(): View
+
+    public function create(): View | RedirectResponse
     {
         $cart = Cart::current();
 
         if ($cart->items->isEmpty()) {
             return to_route('cart.index')
-                ->whith('error', 'Корзина пуста');
+                ->with('error', 'Корзина пуста');
         }
 
         return view('orders.create', compact('cart'));
@@ -34,16 +36,21 @@ class OrderController extends Controller
         ]);
 
         $cart = Cart::current();
-//        dd($cart);
+
+        try {
             $order = $createOrderFromCart($cart, $validated);
-//            dd($order);
-            return to_route('orders.index')
-                ->with('Заказ оформлен')
-                ->setStatusCode(201);
-//        } catch (\Exception $exception) {
-//            return to_route('cart.index')
-//                ->with('error', $exception->getMessage())
-//                ->setStatusCode(422);
-//        }
+            return redirect()->route('orders.show', ['order' => $order])
+                ->with('success', 'Заказ оформлен');
+
+        } catch (\Exception $exception) {
+            return to_route('cart.index')
+                ->with('error', $exception->getMessage())
+                ->setStatusCode(422);
+        }
+    }
+
+    public function show(Order $order): View
+    {
+        return view('orders.show', compact('order'));
     }
 }

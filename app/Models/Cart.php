@@ -15,7 +15,7 @@ class Cart extends Model
         'status_id',
     ];
 
-
+//вынести в отдельный сервис
     public static function current(): self
     {
         if (auth()->check()) {

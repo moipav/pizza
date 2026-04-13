@@ -32,8 +32,9 @@ Route::delete('/cart/items/{cartItem}', [CartItemController::class, 'destroy'])-
 Route::get('/orders/index', [OrderController::class, 'index'])->name('orders.index');//->middleware('auth');
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
 Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
-//Админ часть
+Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 
+//Админ часть
 Route::resource('statuses', UserStatusController::class);
 Route::resource('products', ProductController::class);
 Route::resource('categories', CategoryController::class);

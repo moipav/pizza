@@ -14,7 +14,7 @@ enum CartStatus: string
         return match ($this) {
             self::ACTIVE => 'Акитивна',
             self::COMPLETED => 'Завершена',
-                self::ABANDONED => 'Заброшена',
+            self::ABANDONED => 'Заброшена',
             self::EXPIRED => 'Истекла'
         };
     }
