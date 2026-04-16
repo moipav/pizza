@@ -25,7 +25,7 @@ class UpdateProductRequest extends FormRequest
             'category_id' => 'required|numeric|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|required|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'price' => 'numeric|min:0'
         ];
     }
