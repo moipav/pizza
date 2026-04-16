@@ -1,8 +1,9 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductSize;
@@ -11,16 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
-/*
- * TODO
- * 0. корзина/заказы +/-
- * 1. tests +
- * 2. выводим админские контроллеры в отдельную директорию +
- * 3. docker
- *  . debug  разобраться
- * *4. статусы пользователя переделать в role
- *
- */
 class ProductController extends Controller
 {
     public function index(): View
@@ -38,6 +29,10 @@ class ProductController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        /**
+         * TODO
+         * разобраться с FormRequest
+         */
         $data = $request->validate([
             'category_id' => 'required|numeric|exists:categories,id',
             'name' => 'required|string|max:255',

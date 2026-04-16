@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\Api\V1\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 
@@ -14,9 +15,9 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(): \Illuminate\Http\Resources\Json\ResourceCollection
     {
-        return response()->json(Category::all());
+        return CategoryResource::collection(Category::all());
     }
 
     /**
@@ -31,9 +32,9 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category): JsonResponse
+    public function show(Category $category): CategoryResource
     {
-        return response()->json($category);
+        return new CategoryResource($category);
     }
 
     /**
