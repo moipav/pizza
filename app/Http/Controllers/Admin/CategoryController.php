@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
@@ -50,7 +51,12 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:category,name' . $category->id,
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                    Rule::unique('categories')->ignore($category->id),
+            ],
         ]);
 
         $category->update($validated);
