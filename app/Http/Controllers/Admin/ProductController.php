@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductSize;
@@ -27,19 +28,9 @@ class ProductController extends Controller
         return view('products.create', ['categories' => Category::all()]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreProductRequest $request): RedirectResponse
     {
-        /**
-         * TODO
-         * разобраться с FormRequest
-         */
-        $data = $request->validate([
-            'category_id' => 'required|numeric|exists:categories,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'price' => 'numeric|min:0'
-        ]);
+        $data = $request->validated();
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
@@ -67,15 +58,9 @@ class ProductController extends Controller
     }
 
 
-    public function update(Request $request, Product $product): RedirectResponse
+    public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
-        $data = $request->validate([
-            'category_id' => 'required|numeric|exists:categories,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'price' => 'numeric|min:0'
-        ]);
+        $data = $request->validated();
 
         if ($request->hasFile('image')) {
             if ($product->image) {
