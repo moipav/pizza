@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Category;
@@ -47,7 +47,6 @@ class ProductTest extends TestCase
             'price' => '999'
         ];
         $response = $this->post(route('products.store'), $product_store);
-//        $response->assertSessionHasNoErrors();
         $response->assertStatus(302);
         $response->assertRedirect(route('products.index'));
         $this->assertDatabaseHas('products', [
