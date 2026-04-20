@@ -1,11 +1,10 @@
 <?php
-
-namespace App\Http\Requests;
+declare(strict_types=1);
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreCategoryRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,11 +25,12 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required',
-                'string',
-                'max:255',
-                Rule::unique('categories')
-            ]
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'phone' => 'required|string|unique:users|max:10',
+            'email' => 'required|string|email|unique:users|max:255',
+            'date_of_birth' => 'required|date|before_or_equal:12 years ago',
+            'password' => 'required|min:8|confirmed'
         ];
     }
 }
