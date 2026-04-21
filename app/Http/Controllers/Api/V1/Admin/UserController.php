@@ -26,6 +26,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): JsonResponse
     {
         User::create($request->validated());
+
         return response()->json(['message' => 'Пользователь успешно создан']);
     }
 

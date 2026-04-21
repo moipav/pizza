@@ -49,9 +49,7 @@ class ProductController extends Controller
                 'message' => 'Product not found'
             ]);
         }
-        /**
-         * TODO Разобраться с запросом,не существующих id вывод ошибки?
-         */
+
         return response()->json([
             'data' => new ProductResource($product),
         ]);
@@ -60,7 +58,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product): JsonResponse
     {
         $validated = $request->validated();
 
@@ -80,7 +78,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): JsonResponse
     {
         $product->delete();
         ProductSize::where('product_id', $product->id)->delete();

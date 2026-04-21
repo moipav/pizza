@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductSize;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -78,7 +77,7 @@ class ProductSizeTest extends TestCase
     {
         $updatedData = [
             'product_id' => $this->productSize->id,
-            'size_name' => 'Cредняя',
+            'size_name' => 'Средняя',
             'size_value' => 30,
             'unit' => 'см',
             'price_adjustment' => 120
@@ -87,7 +86,7 @@ class ProductSizeTest extends TestCase
         $response = $this->patch(route('product-sizes.update',  $this->productSize->id), $updatedData);
         $this->assertDatabaseHas('product_sizes', [
             'id' => $this->productSize->id,
-            'size_name' => $this->productSize->size_name
+            'size_name' => $updatedData['size_name'],
         ]);
         $response->assertStatus(302);
     }
