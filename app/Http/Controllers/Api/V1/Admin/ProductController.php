@@ -10,6 +10,7 @@ use App\Http\Resources\Api\V1\ProductResource;
 use App\Models\Product;
 use App\Models\ProductSize;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -40,12 +41,20 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product): ProductResource
+    public function show(int $id): JsonResponse
     {
+        $product = Product::find($id);
+        if ($product === null) {
+            return response()->json([
+                'message' => 'Product not found'
+            ]);
+        }
         /**
          * TODO Разобраться с запросом,не существующих id вывод ошибки?
          */
-        return new ProductResource($product);
+        return response()->json([
+            'data' => new ProductResource($product),
+        ]);
     }
 
     /**
@@ -63,8 +72,8 @@ class ProductController extends Controller
             $validated['image'] = $request->file('image')->store('products', 'public');
         }
 
+        $product->update($validated);
 
-        Product::updated($validated);
         return response()->json(['message' => 'Продукт успешно изменен.']);
     }
 
