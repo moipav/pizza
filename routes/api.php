@@ -12,6 +12,7 @@ Route::prefix('v1')->group(function () {
     Route::apiResource('products', ProductController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('product_sizes', \App\Http\Controllers\Api\V1\Admin\ProductSizeController::class);
+    Route::apiResource('statuses', \App\Http\Controllers\Api\V1\Admin\UserStatusController::class);
 });
 
 
