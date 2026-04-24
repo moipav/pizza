@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\CartResolver;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\ProductSize;
@@ -11,7 +12,7 @@ use Illuminate\Http\Request;
 class CartItemController extends Controller
 {
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, CartResolver $cartResolver): RedirectResponse
     {
         $request->validate([
             'product_size_id' => 'required|exists:product_sizes,id,deleted_at,NULL',
@@ -21,7 +22,7 @@ class CartItemController extends Controller
         $productSize = ProductSize::findOrFail($request->product_size_id);
 
         //получаем/создаем корзину
-        $cart = Cart::current();
+        $cart = $cartResolver->resolve();
 
         //Проверяем, есть ли такой товар в корзине
         $cartItem = $cart->items()->where('product_size_id', $productSize->id)->first();
