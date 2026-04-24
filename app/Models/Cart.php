@@ -21,19 +21,15 @@ class Cart extends Model
         if (auth()->check()) {
             //авторизованный пользователь - ищем по user_id
             return static::firstOrCreate(
-                [
-                    'user_id' => auth()->id(),
-                ],
+                ['user_id' => auth()->id()],
                 ['session_id' => null]
             );
         }
         //гость - используем session_id
         $sessionId = Session::getId();
-        cookie()->queue('guestID', $sessionId, 60*24);
+        cookie()->queue('guestID', $sessionId, 60 * 24);
         return static::firstOrCreate(
-            [
-                'session_id' => $sessionId,
-            ],
+            ['session_id' => $sessionId],
             ['user_id' => null]
         );
     }

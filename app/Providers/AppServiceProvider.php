@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use App\Actions\ApiCartResolver;
+use App\Actions\WebCartResolver;
+use App\Contracts\CartResolver;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +17,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        //Динамическая привязка
+        $this->app->bind(CartResolver::class, function ($app) {
+            if (Request::is('api/*') || Request::expectsJson()) {
+                return new ApiCartResolver();
+            }
+            return new WebCartResolver();
+        });
     }
 
     /**
@@ -19,6 +31,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
     }
 }

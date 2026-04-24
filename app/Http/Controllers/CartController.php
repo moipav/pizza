@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
+use App\Contracts\CartResolver;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -11,10 +11,12 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(CartResolver $cartResolver): View
     {
+        $cart = $cartResolver->resolve();
+
         return view('carts.index', [
-            'cart' => Cart::current()->load('items.productSize.product')
+            'cart' => $cart->load('items.productSize.product')
                 ]
         );
     }
