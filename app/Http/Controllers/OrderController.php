@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\CreateOrderFromCart;
+use App\Actions\Order\CreateOrderFromCart;
 use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;

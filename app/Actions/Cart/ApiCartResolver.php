@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions;
+namespace App\Actions\Cart;
 
 use App\Contracts\CartResolver;
 use App\Models\Cart;

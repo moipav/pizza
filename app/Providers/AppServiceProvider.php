@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Actions\ApiCartResolver;
-use App\Actions\WebCartResolver;
+use App\Actions\Cart\ApiCartResolver;
+use App\Actions\Cart\WebCartResolver;
 use App\Contracts\CartResolver;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
@@ -31,6 +31,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+//        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
     }
 }
