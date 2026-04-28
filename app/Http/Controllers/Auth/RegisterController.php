@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\Auth\RegisterUser;
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
@@ -16,21 +14,11 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request, RegisterUser $registerUser)
     {
-        $request->validate([
-           'name' => ['required', 'string', 'max:255'],
-           'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-           'password' => [ 'required', 'confirmed', Password::min(8)]
-        ]);
+        $result = $registerUser->execute($request->all());
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        Auth::login($user); //атоматический вход после регистрации
+        Auth::login($result['user']); //атоматический вход после регистрации
 
         return to_route('home')
             ->with('success', 'Вы успешно зарегестрировались, добро пожаловать!')

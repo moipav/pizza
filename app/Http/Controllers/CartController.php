@@ -15,9 +15,10 @@ class CartController extends Controller
     {
         $cart = $cartResolver->resolve();
 
-        return view('carts.index', [
-            'cart' => $cart->load('items.productSize.product')
-                ]
+        return view('carts.index',
+            [
+                'cart' => $cart->load('items.productSize.product')
+            ]
         );
     }
 

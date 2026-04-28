@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -49,9 +49,10 @@ class CartItemController extends Controller
 
     }
 
-    public function update(Request $request, CartItem $cartItem): RedirectResponse
+    public function update(Request $request, CartItem $cartItem, CartResolver $resolver): RedirectResponse
     {
-        if ($cartItem->cart_id !== Cart::current()->id) {
+        $currentCart = $resolver->resolve();
+        if ($cartItem->cart_id !== $currentCart->id) {
             abort(403);
         }
 
@@ -66,9 +67,10 @@ class CartItemController extends Controller
     }
 
 
-    public function destroy(CartItem $cartItem): RedirectResponse
+    public function destroy(CartItem $cartItem, CartResolver $resolver): RedirectResponse
     {
-        if ($cartItem->cart_id !== Cart::current()->id) {
+        $currentCart = $resolver->resolve();
+        if ($cartItem->cart_id !== $currentCart->id) {
             abort(403);
         }
 

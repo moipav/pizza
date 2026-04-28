@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Models;
 
@@ -15,7 +15,6 @@ class Cart extends Model
         'status_id',
     ];
 
-//вынести в отдельный сервис
 
 
     public function user(): BelongsTo

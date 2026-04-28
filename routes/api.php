@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 #Маршруты объединяем если понадобится версионирование
-Route::prefix('v1')->/*middleware(['auth:sanctum'])->*/group(function () {
+Route::prefix('v1')->/*middleware(['auth:sanctum'])->*/ group(function () {
     #Админ
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('products', ProductController::class);
@@ -17,29 +17,9 @@ Route::prefix('v1')->/*middleware(['auth:sanctum'])->*/group(function () {
     Route::apiResource('product_sizes', ProductSizeController::class);
     Route::apiResource('statuses', UserStatusController::class);
 
+    #login
 
+    Route::post('register', [\App\Http\Controllers\Api\V1\Auth\RegisterController::class, 'register']);
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Route::get('/user', function (Request $request) {
-    $name = $request->get('name');
-    return response()->json([
-        'request' => $name,
-        'test'=>'API it\'s work'
-    ]);
-//})->middleware('auth:sanctum');
-});
