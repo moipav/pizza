@@ -20,6 +20,8 @@ Route::prefix('v1')->/*middleware(['auth:sanctum'])->*/ group(function () {
     #login
 
     Route::post('register', [\App\Http\Controllers\Api\V1\Auth\RegisterController::class, 'register']);
+    Route::post('login', [\App\Http\Controllers\Api\V1\Auth\LoginController::class, 'login']);
+    Route::post('logout', [\App\Http\Controllers\Api\V1\Auth\LoginController::class, 'logout'])->middleware('auth:sanctum');
 });
 
 

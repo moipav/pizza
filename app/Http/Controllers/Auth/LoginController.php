@@ -1,37 +1,37 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\Cart\MergeCartWithLogin;
 use App\Http\Controllers\Controller;
-use App\Models\Cart;
-use App\Models\CartStatus;
+use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+
 class LoginController extends Controller
 {
+    public function __construct(
+        private readonly MergeCartWithLogin $mergeCartWithLogin,
+    )
+    {}
     private $guestID;
     public function showLoginForm(): View
     {
         return view('auth.login');
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request): RedirectResponse
     {
-
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
 
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials, $request->remember)) {
-            $this->mergeCartWithLogin($request->cookie('guestID'));
+            $this->mergeCartWithLogin->execute(Auth::id(), $request->cookie('guestID' ?? $request->session()->getId()));
             $request->session()->regenerate();
             return redirect()->intended(route('home'));
-            #переадресация либо на запрашиваемую страницу, либо на /home
         }
 
         return back()
@@ -42,42 +42,8 @@ class LoginController extends Controller
 
     }
 
-    private function mergeCartWithLogin($guestID)
-    {
 
-        /**
-         * TODO
-         * Надо порефакторить!
-         * Вынесем либо в модель полностью либо в Action
-         */
-        $userId = Auth::id();
-        $activeStatus = CartStatus::where('name', 'active')->first();
-        $guestCart = Cart::where('session_id', $guestID)->first();
-
-        if (!$guestCart) {
-            return;
-        }
-
-        $userCart = Cart::firstOrCreate(
-            ['user_id' => $userId, 'status_id' => $activeStatus->id],
-        );
-
-        foreach ($guestCart->items as $item) {
-            $existingCartItem = $userCart->items()->where('product_size_id', $item->product_size_id)->first();
-            if ($existingCartItem) {
-                $existingCartItem->update([
-                    'quantity' => $existingCartItem->quantity + $item->quantity
-                ]);
-            } else {
-                $item->update(['cart_id' => $userCart->id]);
-            }
-        }
-
-        $guestCart->delete();
-
-    }
-
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
         $request->session()->invalidate();
