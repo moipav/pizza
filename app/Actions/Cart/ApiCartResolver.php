@@ -6,23 +6,28 @@ namespace App\Actions\Cart;
 
 use App\Contracts\CartResolver;
 use App\Models\Cart;
+use App\Models\CartStatus;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class ApiCartResolver implements CartResolver
 {
 
-    public function resolve(): Cart
+    public function resolve(?string $guestToken = null): Cart
     {
-        if (!Auth::check()) {
-            throw new UnauthorizedHttpException('Требуется авторизация');
-            // В API работаем только с авторизованными пользователями
-            // Или можно добавить логику по заголовку X-Guest-Token, если нужно
+        $activeStatus = CartStatus::where('name', 'active')->firstOrFail();
+        if (Auth::check()) {
+            return Cart::firstOrCreate(
+                ['user_id' => Auth::id()],
+                ['session_id' => null, 'status_id' => $activeStatus->id]);
         }
 
-        return Cart::firstOrCerate(
-            ['user_id' => Auth::id()],
-            ['session_id' => null]
+        //гость
+        $token = $guestToken ?? Str::uuid()->toString();
+        return Cart::firstOrCreate(
+            ['user_id' => null],
+            ['session_id' => $token, 'status_id' => $activeStatus->id]
         );
     }
 }

@@ -36,7 +36,7 @@ class MergeCartWithLogin
             }
 
             //получаем или создаем корзину пользователя
-            $activeStatus = CartStatus::where('name', 'active')->first();
+            $activeStatus = CartStatus::where('name', 'active')->firstOrFail();
 
             $userCart = Cart::firstOrCreate(
                 [

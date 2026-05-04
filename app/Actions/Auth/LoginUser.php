@@ -8,7 +8,7 @@ use Illuminate\Validation\ValidationException;
 
 class LoginUser
 {
-    public function execute(LoginRequest $request)
+    public function execute(LoginRequest $request): array
     {
         $credentials = $request->only(['email', 'password']);
 
@@ -18,7 +18,7 @@ class LoginUser
         $user = Auth::user();
 
         return [
-            'user' => $user,
+            'user' => $user->only(['id', 'name', 'email', 'role']),
             'token' => $user->createToken('auth_token')->plainTextToken,
         ];
     }

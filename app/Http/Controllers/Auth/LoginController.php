@@ -17,7 +17,7 @@ class LoginController extends Controller
         private readonly MergeCartWithLogin $mergeCartWithLogin,
     )
     {}
-    private $guestID;
+
     public function showLoginForm(): View
     {
         return view('auth.login');
@@ -28,8 +28,9 @@ class LoginController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials, $request->remember)) {
-            $this->mergeCartWithLogin->execute(Auth::id(), $request->cookie('guestID' ?? $request->session()->getId()));
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $guestId = $request->cookie('guestID' ?? $request->session()->getId());
+            $this->mergeCartWithLogin->execute(Auth::id(), $guestId);
             $request->session()->regenerate();
             return redirect()->intended(route('home'));
         }

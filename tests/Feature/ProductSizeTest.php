@@ -76,9 +76,9 @@ class ProductSizeTest extends TestCase
     public function test_product_size_update(): void
     {
         $updatedData = [
-            'product_id' => $this->productSize->id,
+            'product_id' => $this->productSize->product_id,
             'size_name' => 'Средняя',
-            'size_value' => 30,
+            'size_value' => '30',
             'unit' => 'см',
             'price_adjustment' => 120
         ];
