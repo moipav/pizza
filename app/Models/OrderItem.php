@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -36,10 +37,5 @@ class OrderItem extends Model
         return $this->belongsTo(ProductSize::class, 'product_size_id');
     }
 
-    // Удобный атрибут для отображения
-    public function getDisplayNameAttribute(): string
-    {
-        return $this->product_name . ' (' . $this->product_size_name . ')';
-    }
 }
 
