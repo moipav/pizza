@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Order\CreateOrderFromCart;
+use App\Contracts\CartResolver;
 use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
@@ -11,6 +12,12 @@ use Illuminate\View\View;
 
 class OrderController extends Controller
 {
+    public function __construct(
+        private readonly CartResolver $cartResolver
+    )
+    {
+    }
+
     public function index(): View
     {
         return view('orders.index', []);
@@ -18,7 +25,7 @@ class OrderController extends Controller
 
     public function create(): View | RedirectResponse
     {
-        $cart = Cart::current();
+        $cart = $this->cartResolver->resolve();
 
         if ($cart->items->isEmpty()) {
             return to_route('cart.index')
@@ -35,7 +42,7 @@ class OrderController extends Controller
             'phone' => 'string|nullable|max:255',
         ]);
 
-        $cart = Cart::current();
+        $cart = $this->cartResolver->resolve();
 
         try {
             $order = $createOrderFromCart($cart, $validated);
