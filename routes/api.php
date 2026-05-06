@@ -11,11 +11,14 @@ use Illuminate\Support\Facades\Route;
 #Маршруты объединяем если понадобится версионирование
 Route::prefix('v1')->/*middleware(['auth:sanctum'])->*/ group(function () {
     #Админ
-    Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('products', ProductController::class);
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('product_sizes', ProductSizeController::class);
-    Route::apiResource('statuses', UserStatusController::class);
+    Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+        Route::apiResource('categories', CategoryController::class);
+        Route::apiResource('products', ProductController::class);
+        Route::apiResource('users', UserController::class);
+        Route::apiResource('product_sizes', ProductSizeController::class);
+        Route::apiResource('statuses', UserStatusController::class);
+
+    });
 
     #login
 
