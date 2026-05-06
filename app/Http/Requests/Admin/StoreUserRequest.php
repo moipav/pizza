@@ -1,7 +1,10 @@
 <?php declare(strict_types=1);
+
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Factory;
+use Illuminate\Validation\ValidationException;
 
 class StoreUserRequest extends FormRequest
 {
@@ -10,10 +13,8 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        /**
-         * TODO добавить проверку авторизации
-         */
-        return true;
+//return true;
+        return $this->user()?->role() == 'admin';
     }
 
     /**
@@ -32,4 +33,22 @@ class StoreUserRequest extends FormRequest
             'password' => 'required|min:8|confirmed'
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+          'role.in' => 'Не достаточно прав доступа'
+        ];
+    }
+
+    protected function failedAuthorization()
+    {
+        throw ValidationException::withMessages([
+            'auth' => ' Недостаточно прав для этого действия!!'
+        ])->redirectTo(
+            url()->previous() ?? route('home')
+        );
+    }
+
+
 }
