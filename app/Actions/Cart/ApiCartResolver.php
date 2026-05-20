@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace App\Actions\Cart;
 
@@ -9,7 +7,6 @@ use App\Models\Cart;
 use App\Models\CartStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class ApiCartResolver implements CartResolver
 {
@@ -26,8 +23,8 @@ class ApiCartResolver implements CartResolver
         //гость
         $token = $guestToken ?? Str::uuid()->toString();
         return Cart::firstOrCreate(
-            ['user_id' => null],
-            ['session_id' => $token, 'status_id' => $activeStatus->id]
+            ['session_id' => $token],
+            ['user_id' => null, 'status_id' => $activeStatus->id]
         );
     }
 }

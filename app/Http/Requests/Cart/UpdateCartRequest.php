@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
-namespace App\Http\Requests\Admin;
+<?php
+
+namespace App\Http\Requests\Cart;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreCategoryRequest extends FormRequest
+class UpdateCartRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,7 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required',
-                'string',
-                'max:255',
-                Rule::unique('categories')
-            ]
+            //
         ];
     }
 }

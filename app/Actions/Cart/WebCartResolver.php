@@ -22,8 +22,7 @@ class WebCartResolver implements CartResolver
         $sessionId = Session::getId();
         cookie()->queue('guestID', $sessionId, 60 * 24);
         return Cart::firstOrCreate(
-            ['session_id' => $sessionId],
-            ['user_id' => null]
+            ['session_id' => $sessionId, 'user_id' => null],
         );
     }
 }
