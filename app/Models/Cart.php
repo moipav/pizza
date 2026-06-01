@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Models;
 
@@ -13,30 +13,10 @@ class Cart extends Model
         'user_id',
         'session_id',
         'status_id',
+        'product_size_id',
     ];
 
-//вынести в отдельный сервис
-    public static function current(): self
-    {
-        if (auth()->check()) {
-            //авторизованный пользователь - ищем по user_id
-            return static::firstOrCreate(
-                [
-                    'user_id' => auth()->id(),
-                ],
-                ['session_id' => null]
-            );
-        }
-        //гость - используем session_id
-        $sessionId = Session::getId();
-        cookie()->queue('guestID', $sessionId, 60*24);
-        return static::firstOrCreate(
-            [
-                'session_id' => $sessionId,
-            ],
-            ['user_id' => null]
-        );
-    }
+
 
     public function user(): BelongsTo
     {

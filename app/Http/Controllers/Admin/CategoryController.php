@@ -1,11 +1,12 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreCategoryRequest;
+use App\Http\Requests\Admin\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
@@ -23,13 +24,9 @@ class CategoryController extends Controller
     }
 
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreCategoryRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => '|required|string|max:255|unique'
-        ]);
-
-        Category::create($validated);
+        Category::create($request->all());
 
         return to_route('categories.index')->with('success', 'Категория добавлена');
     }
@@ -47,13 +44,9 @@ class CategoryController extends Controller
     }
 
 
-    public function update(Request $request, Category $category): RedirectResponse
+    public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:category,name' . $category->id,
-        ]);
-
-        $category->update($validated);
+        $category->update($request->all());
 
         return to_route('categories.index')->with('success', 'Название категории изменено!');
     }

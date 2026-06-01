@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::resource('users', UserController::class);
 
 //корзина
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -35,10 +34,14 @@ Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.st
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 
 //Админ часть
-Route::resource('statuses', UserStatusController::class);
-Route::resource('products', ProductController::class);
-Route::resource('categories', CategoryController::class);
-Route::resource('product-sizes', ProductSizeController::class);
+Route::middleware(['auth','role:admin'])->group(function () {
+    Route::resource('statuses', UserStatusController::class);
+    Route::resource('products', ProductController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('product-sizes', ProductSizeController::class);
+    Route::resource('users', UserController::class);
+});
+
 
 #Регистрация
 Route::middleware('guest')->group(function () {

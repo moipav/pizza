@@ -1,8 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreUserStatusRequest;
+use App\Http\Requests\Admin\UpdateUserStatusRequest;
 use App\Models\UserStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +17,6 @@ class UserStatusController extends Controller
      */
     public function index(): View
     {
-
         return view('users.statuses.index', ['statuses' => UserStatus::all()]);
     }
 
@@ -30,11 +31,9 @@ class UserStatusController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreUserStatusRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:user_statuses'
-        ]);
+        $validated = $request->validated();
 
         $userStatus = UserStatus::create($validated);
 
@@ -61,11 +60,9 @@ class UserStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, UserStatus $status): RedirectResponse
+    public function update(UpdateUserStatusRequest $request, UserStatus $status): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|unique:user_statuses,name,' . $status->id . '|max:255'
-        ]);
+        $validated = $request->validated();
 
         try {
             $status->update($validated);

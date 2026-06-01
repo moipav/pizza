@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
+use App\Contracts\CartResolver;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -11,11 +11,14 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(CartResolver $cartResolver): View
     {
-        return view('carts.index', [
-            'cart' => Cart::current()->load('items.productSize.product')
-                ]
+        $cart = $cartResolver->resolve();
+
+        return view('carts.index',
+            [
+                'cart' => $cart->load('items.productSize.product')
+            ]
         );
     }
 
@@ -24,7 +27,7 @@ class CartController extends Controller
      */
     public function create()
     {
-        ///
+
     }
 
     /**
@@ -32,7 +35,7 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

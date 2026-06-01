@@ -1,7 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\Cart\AddItemToCart;
+use App\Actions\Cart\UpdateCartItemQuantity;
+use App\Contracts\CartResolver;
+use App\Http\Requests\Admin\StoreCategoryRequest;
+use App\Http\Requests\Cart\StoreCartItemRequest;
+use App\Http\Requests\Cart\UpdateCartItemRequest;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\ProductSize;
@@ -11,69 +17,69 @@ use Illuminate\Http\Request;
 class CartItemController extends Controller
 {
 
-    public function store(Request $request): RedirectResponse
+    public function __construct(
+        private readonly AddItemToCart         $addItemToCart,
+        private readonly UpdateCartItemQuantity $updateCartItemQuantity,
+        private readonly CartResolver          $cartResolver,
+    )
     {
-        $request->validate([
-            'product_size_id' => 'required|exists:product_sizes,id,deleted_at,NULL',
-            'quantity' => 'required|integer|min:1|max:999',
-        ]);
-
-        $productSize = ProductSize::findOrFail($request->product_size_id);
-
-        //получаем/создаем корзину
-        $cart = Cart::current();
-
-        //Проверяем, есть ли такой товар в корзине
-        $cartItem = $cart->items()->where('product_size_id', $productSize->id)->first();
-
-        //расчитываем цену
-        $pricePerUnit = $productSize->product->price + $productSize->price_adjustment;
-
-        if ($cartItem) {
-            $cartItem->update([
-                'quantity' => $cartItem->quantity + $request->quantity,
-                'price_per_unit' => $pricePerUnit
-            ]);
-        } else {
-            CartItem::create([
-                'cart_id' => $cart->id,
-                'product_id' => $productSize->product->id,
-                'product_size_id' => $productSize->id,
-                'quantity' => $request->quantity,
-                'price_per_unit' => $pricePerUnit,
-            ]);
-        }
-
-        return to_route('home')->with('success', 'Товар добавлен в корзину');
 
     }
 
-    public function update(Request $request, CartItem $cartItem): RedirectResponse
+    public function store(StoreCartItemRequest $request): RedirectResponse
     {
-        if ($cartItem->cart_id !== Cart::current()->id) {
-            abort(403);
+        try {
+            $cart = $this->cartResolver->resolve();
+            $productSize = ProductSize::with('product')->findOrFail($request->product_size_id);
+            $this->addItemToCart->execute(
+                $cart,
+                $productSize,
+                (int)$request->quantity,
+            );
+
+            return to_route('home')->with('success', 'Товар добавлен в корзину');
+        }catch (\Throwable $exception){
+            report($exception);
+            return to_route('home')->with('error', 'Не удалось добавить товар');
         }
 
-        $request->validate([
-            'quantity' => 'required|integer|min:1|max:9999'
-        ]);
+    }
 
-        $cartItem->update(['quantity' => $request->quantity]);
+    public function update(UpdateCartItemRequest $request, CartItem $cartItem): RedirectResponse
+    {
+        try {
+            $currentCart = $this->cartResolver->resolve();
+            if ($cartItem->cart_id !== $currentCart->id) {
+                abort(403, 'Доступ запрещен');
+            }
 
-        return to_route('cart.index')
-            ->with('success', 'Данные обновлены');
+            $this->updateCartItemQuantity->execute($cartItem, (int)$request->quantity);
+
+            return to_route('cart.index')
+                ->with('success', 'Данные обновлены');
+        } catch (\Throwable $exception) {
+            report($exception);
+            return to_route('cart.index')->with('error', 'Не удалось обновить количество');
+        }
     }
 
 
-    public function destroy(CartItem $cartItem): RedirectResponse
+    public function destroy(CartItem $cartItem, CartResolver $resolver): RedirectResponse
     {
-        if ($cartItem->cart_id !== Cart::current()->id) {
-            abort(403);
+        try {
+            $currentCart = $resolver->resolve();
+            if ($cartItem->cart_id !== $currentCart->id) {
+                abort(403);
+            }
+
+            $cartItem->delete();
+
+            return to_route('cart.index')
+                ->with('success', 'Товар удален');
+        } catch (\Throwable $exception) {
+            report($exception);
+            return to_route('cart.index')->with('error', 'Не удалось удалить товар');
         }
 
-        $cartItem->delete();
-
-        return to_route('cart.index')
-            ->with('success', 'Товар удален');
     }
 }

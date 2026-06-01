@@ -1,13 +1,13 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreProductSizeRequest;
+use App\Http\Requests\Admin\UpdateProductSizeRequest;
 use App\Models\Product;
 use App\Models\ProductSize;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ProductSizeController extends Controller
@@ -34,22 +34,9 @@ class ProductSizeController extends Controller
     }
 
 
-    public function store(Request $request, Product $product): RedirectResponse
+    public function store(StoreProductSizeRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'size_name' => 'required|string|max:50',
-            'size_value' => [
-                'required',
-                'numeric',
-                Rule::unique('product_sizes')
-                    ->where('product_id', $request->input('product_id'))
-                    ->where('size_name', $request->input('size_name'))
-                    ->where('size_value', $request->input('size_value')),
-            ],
-            'unit' => 'required|string|max:10',
-            'price_adjustment' => 'required|numeric|min:0',
-        ]);
+        $validated = $request->validated();
 
         ProductSize::create($validated);
 
@@ -77,24 +64,9 @@ class ProductSizeController extends Controller
     }
 
 
-    public function update(Request $request, ProductSize $productSize): RedirectResponse
+    public function update(UpdateProductSizeRequest $request, ProductSize $productSize): RedirectResponse
     {
-        $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'size_name' => 'required|string|max:50',
-            'size_value' => [
-                'required',
-                'numeric',
-                Rule::unique('product_sizes')
-                    ->where('product_id', $request->input('product_id'))
-                    ->where('size_name', $request->input('size_name'))
-                    ->where('size_value', $request->input('size_value'))
-                    ->ignore($productSize->id)
-            ],
-            'unit' => 'required|string|max:10',
-            'price_adjustment' => 'required|numeric|min:0',
-        ]);
-
+        $validated = $request->validated();
 
         $productSize->update($validated);
 

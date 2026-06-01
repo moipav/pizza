@@ -62,7 +62,7 @@ public User $user;
         ]);
         $this->actingAs($this->user);
 
-        $response = $this->post('/logout');
+        $response = $this->get('/logout');
 
         $response->assertRedirect(route('home'));
         $this->assertGuest();
